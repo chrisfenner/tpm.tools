@@ -1,17 +1,10 @@
 package main
 
 import (
-	"embed"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
 )
-
-//go:embed templates/*
-var resources embed.FS
-
-var t = template.Must(template.ParseFS(resources, "templates/*"))
 
 func main() {
 	port := os.Getenv("PORT")
@@ -20,13 +13,9 @@ func main() {
 
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		data := map[string]string{
-			"Region": os.Getenv("FLY_REGION"),
-		}
-
-		t.ExecuteTemplate(w, "index.html.tmpl", data)
-	})
+	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	http.Redirect(w, r, "/index.html", http.StatusMovedPermanently)
+	// })
 
 	log.Println("listening on", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
