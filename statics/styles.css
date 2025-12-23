@@ -53,6 +53,32 @@ header {
   font-family: "Courier New", Courier, monospace;
 }
 
+.app {
+  font-size: 16pt;
+  color: white;
+  background-color: purple;
+  margin: 5pt;
+  padding: 5pt;
+  min-width: 30pt;
+  border-radius: 10pt;
+  box-shadow: 1pt 1pt 2pt #000000aa;
+  text-align: center;
+}
+
+.app:hover {
+  background-color: hotpink;
+}
+
+a.app {
+  min-width: 30pt;
+  min-height: 5pt;
+  display: block;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
 footer {
   background-color: #14101b;
   box-shadow: 1pt 1pt 2pt #000000aa;
