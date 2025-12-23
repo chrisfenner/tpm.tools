@@ -30,3 +30,7 @@ primary_region = 'sjc'
 [[statics]]
 guest_path = "/statics"
 url_prefix = "/"
+
+[[statics]]
+guest_path = "/statics/rc.html"
+url_prefix = "/rc"
