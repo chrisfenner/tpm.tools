@@ -1,6 +1,6 @@
 # TPM.tools
 
-Source code for <tpm.tools>. Feel free to deploy and use this in accordance with the [license](LICENSE).
+Source code for [tpm.tools](https://tpm.tools). Feel free to deploy and use this in accordance with the [license](LICENSE).
 
 ## Build
 
