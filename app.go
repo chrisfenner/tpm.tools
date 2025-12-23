@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/chrisfenner/tpm.tools/pkg/httphelpers"
 )
 
 //go:embed generated/*.html
@@ -20,75 +22,13 @@ func main() {
 
 	}
 
-	http.HandleFunc("/styles.css", func(w http.ResponseWriter, r *http.Request) {
-		data, err := statics.ReadFile("statics/styles.css")
-		if err != nil {
-			http.Error(w, "File not found", http.StatusNotFound)
-			return
-		}
-		w.Header().Set("Content-Type", "text/css")
-		w.Write(data)
-	})
-
-	http.HandleFunc("/media/logo-small.png", func(w http.ResponseWriter, r *http.Request) {
-		data, err := statics.ReadFile("statics/media/logo-small.png")
-		if err != nil {
-			http.Error(w, "File not found", http.StatusNotFound)
-			return
-		}
-		w.Header().Set("Content-Type", "image/png")
-		w.Write(data)
-	})
-
-	http.HandleFunc("/manifest.json", func(w http.ResponseWriter, r *http.Request) {
-		data, err := statics.ReadFile("statics/manifest.json")
-		if err != nil {
-			http.Error(w, "File not found", http.StatusNotFound)
-			return
-		}
-		w.Header().Set("Content-Type", "application/manifest+json")
-		w.Write(data)
-	})
-
-	http.HandleFunc("/media/favicon-192.png", func(w http.ResponseWriter, r *http.Request) {
-		data, err := statics.ReadFile("statics/media/favicon-192.png")
-		if err != nil {
-			http.Error(w, "File not found", http.StatusNotFound)
-			return
-		}
-		w.Header().Set("Content-Type", "image/png")
-		w.Write(data)
-	})
-
-	http.HandleFunc("/media/favicon-512.png", func(w http.ResponseWriter, r *http.Request) {
-		data, err := statics.ReadFile("statics/media/favicon-512.png")
-		if err != nil {
-			http.Error(w, "File not found", http.StatusNotFound)
-			return
-		}
-		w.Header().Set("Content-Type", "image/png")
-		w.Write(data)
-	})
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		data, err := generatedHTML.ReadFile("generated/index.html")
-		if err != nil {
-			http.Error(w, "File not found", http.StatusNotFound)
-			return
-		}
-		w.Header().Set("Content-Type", "text/html")
-		w.Write(data)
-	})
-
-	http.HandleFunc("/rc", func(w http.ResponseWriter, r *http.Request) {
-		data, err := generatedHTML.ReadFile("generated/rc.html")
-		if err != nil {
-			http.Error(w, "File not found", http.StatusNotFound)
-			return
-		}
-		w.Header().Set("Content-Type", "text/html")
-		w.Write(data)
-	})
+	http.HandleFunc("/styles.css", httphelpers.StaticallyServe(statics, "statics/styles.css", "text/css"))
+	http.HandleFunc("/media/logo-small.png", httphelpers.StaticallyServe(statics, "statics/media/logo-small.png", "image/png"))
+	http.HandleFunc("/manifest.json", httphelpers.StaticallyServe(statics, "statics/manifest.json", "application/manifest+json"))
+	http.HandleFunc("/media/favicon-192.png", httphelpers.StaticallyServe(statics, "statics/media/favicon-192.png", "image/png"))
+	http.HandleFunc("/media/favicon-512.png", httphelpers.StaticallyServe(statics, "statics/media/favicon-512.png", "image/png"))
+	http.HandleFunc("/", httphelpers.StaticallyServe(generatedHTML, "generated/index.html", "text/html"))
+	http.HandleFunc("/rc", httphelpers.StaticallyServe(generatedHTML, "generated/rc.html", "text/html"))
 
 	log.Println("listening on", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
