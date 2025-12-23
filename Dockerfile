@@ -14,7 +14,12 @@ RUN cleancss -o statics/styles.css statics/styles.css
 FROM golang:1.25-alpine AS builder
 
 WORKDIR /usr/src/app
-# Just copy everything from the previous builder stage/s workdir, it's ok.
+
+# Copy Go mod files and download dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy everything else from the previous builder stage/s workdir, it's ok.
 COPY --from=builder_npm /usr/src/app .
 
 # Generate the minified static HTML files.
