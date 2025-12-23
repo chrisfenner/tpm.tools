@@ -6,10 +6,6 @@
 app = 'tpm-tools'
 primary_region = 'sjc'
 
-[build]
-  [build.args]
-    GO_VERSION = '1.22'
-
 [env]
   PORT = '8080'
 
