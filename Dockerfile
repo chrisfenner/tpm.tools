@@ -1,5 +1,4 @@
-ARG GO_VERSION=1
-FROM golang:${GO_VERSION}-bookworm AS builder
+FROM golang:1.25.5-trixie AS builder
 
 WORKDIR /usr/src/app
 COPY . .
@@ -11,7 +10,7 @@ RUN go run ./templates/templatizer.go
 RUN go build -v -o /run-app .
 
 
-FROM debian:bookworm
+FROM debian:trixie
 
 COPY --from=builder /run-app /usr/local/bin/
 CMD ["run-app"]
