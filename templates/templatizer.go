@@ -42,12 +42,16 @@ func main() {
 	m := minify.New()
 	m.AddFunc("text/html", html.Minify)
 
-	// At startup, render each output template.
+	// Render each output template.
 	for _, temp := range temps {
 		if !strings.HasSuffix(temp.Name(), ".html.tmpl") {
 			continue
 		}
 		genFileName := path.Join(*outputDir, strings.ReplaceAll(temp.Name(), ".html.tmpl", ".html"))
+		if err := os.MkdirAll(*outputDir, 0755); err != nil {
+			log.Fatalf("Could not create directory %q for writing: %v", *outputDir, err)
+		}
+
 		w, err := os.Create(genFileName)
 		if err != nil {
 			log.Fatalf("Could not create file %q for writing: %v", genFileName, err)
