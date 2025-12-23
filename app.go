@@ -27,6 +27,7 @@ func main() {
 	http.HandleFunc("/manifest.json", httphelpers.StaticallyServe(statics, "statics/manifest.json", "application/manifest+json"))
 	http.HandleFunc("/media/favicon-192.png", httphelpers.StaticallyServe(statics, "statics/media/favicon-192.png", "image/png"))
 	http.HandleFunc("/media/favicon-512.png", httphelpers.StaticallyServe(statics, "statics/media/favicon-512.png", "image/png"))
+	http.HandleFunc("/media/github-mark-white.svg", httphelpers.StaticallyServe(statics, "statics/media/github-mark-white.svg", "image/svg+xml"))
 	http.HandleFunc("/", httphelpers.StaticallyServe(generatedHTML, "generated/index.html", "text/html"))
 	http.HandleFunc("/rc", httphelpers.StaticallyServe(generatedHTML, "generated/rc.html", "text/html"))
 
