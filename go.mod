@@ -1,4 +1,4 @@
-module github.com/fly-apps/go-example
+module github.com/chrisfenner/tpm.tools
 
 go 1.24.0
 
