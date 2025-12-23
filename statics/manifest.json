@@ -1,0 +1,20 @@
+{
+  "short_name": "TPM.tools",
+  "name": "TPM.tools",
+  "icons": [
+    {
+      "src": "/media/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/media/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#25212d",
+  "background_color": "#1d1c21"
+}
