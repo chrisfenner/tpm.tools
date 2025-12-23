@@ -11,7 +11,7 @@ RUN cleancss -o statics/styles.css statics/styles.css
 
 # The second build environment has golang and we use it to build the app
 # (which embeds some of the files we minified from npm above)
-FROM golang:1.25.5-trixie AS builder
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /usr/src/app
 # Just copy everything from the previous builder stage/s workdir, it's ok.
@@ -23,7 +23,7 @@ RUN go run ./templates/templatizer.go
 # Compile the actual app, which will embed the above files.
 RUN go build -v -o /run-app .
 
-FROM debian:trixie
+FROM alpine:3.23
 
 COPY --from=builder /run-app /usr/local/bin/
 CMD ["run-app"]
