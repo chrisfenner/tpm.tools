@@ -1,9 +1,19 @@
-# go-example
+# TPM.tools
 
-A minimal Go application for [fly.io Getting Started](https://fly.io/docs/getting-started/golang/) documentation and tutorials.
+Source code for <tpm.tools>. Feel free to deploy and use this in accordance with the [license](LICENSE).
 
-To get started:
+## Build
 
-1. clone this repo
-2. `flyctl launch`
-3. view the deployed app with flyctl open
+This project builds with `docker build`.
+
+```sh
+docker build -t tpm-tools:latest .
+```
+
+## Deploy
+
+While this project is designed for deployment to <fly.io>, you can also just `docker run` it.
+
+```sh
+docker run -p 8080:8080 tpm-tools:latest
+```
