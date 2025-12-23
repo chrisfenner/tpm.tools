@@ -26,7 +26,3 @@ primary_region = 'sjc'
   cpu_kind = 'shared'
   cpus = 1
   memory_mb = 1024
-
-[[statics]]
-guest_path = "/statics"
-url_prefix = "/"

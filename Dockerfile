@@ -1,10 +1,13 @@
 ARG GO_VERSION=1
-FROM golang:${GO_VERSION}-bookworm as builder
+FROM golang:${GO_VERSION}-bookworm AS builder
 
 WORKDIR /usr/src/app
-COPY go.mod go.sum ./
-RUN go mod download && go mod verify
 COPY . .
+
+# Generate the minified static HTML files.
+RUN go run ./templates/templatizer.go
+
+# Compile the actual app, which will embed the above files.
 RUN go build -v -o /run-app .
 
 
@@ -12,5 +15,3 @@ FROM debian:bookworm
 
 COPY --from=builder /run-app /usr/local/bin/
 CMD ["run-app"]
-
-COPY statics/ /statics/

@@ -1,3 +1,10 @@
 module github.com/fly-apps/go-example
 
-go 1.22
+go 1.24.0
+
+require github.com/tdewolff/minify v2.3.6+incompatible
+
+require (
+	github.com/tdewolff/parse v2.3.4+incompatible // indirect
+	github.com/tdewolff/test v1.0.11 // indirect
+)
