@@ -3,17 +3,38 @@
 FROM node:25-trixie AS builder_npm
 
 WORKDIR /usr/src/app
-COPY . .
 RUN npm install clean-css-cli -g
+RUN npm install @protobuf-ts/plugin protoc
+RUN npm install -D typescript ts-loader
+RUN npm install --save-dev webpack webpack-cli
+RUN npm install --save-dev @types/node
+
+COPY . .
 
 # Minify the CSS file in-place.
 RUN cleancss -o statics/styles.css statics/styles.css
+
+# Compile the protobufs into the proto directory
+RUN npx protoc --ts_out proto/ --proto_path proto proto/rc.proto
+
+# Compile the TypeScript
+# RUN tsc --project ./tsconfig.json --outDir generated/js
+
+# Build the js bundle using webpack
+RUN npx webpack-cli -c ./webpack.config.js
+RUN ls dist/bundle.js
 
 # The second build environment has golang and we use it to build the app
 # (which embeds some of the files we minified from npm above)
 FROM golang:1.25-alpine AS builder
 
 WORKDIR /usr/src/app
+
+# Install the protocol buffer compiler
+RUN apk update && apk add protoc
+
+# Install protoc-gen-go
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 
 # Copy Go mod files and download dependencies
 COPY go.mod go.sum ./
@@ -24,6 +45,12 @@ COPY --from=builder_npm /usr/src/app .
 
 # Generate the minified static HTML files.
 RUN go run ./templates/templatizer.go
+
+# Run the protobuf compiler
+RUN protoc --go_out=. --go_opt=paths=source_relative proto/rc.proto
+RUN ls *.go
+RUN ls proto
+RUN cat proto/rc.pb.go
 
 # Compile the actual app, which will embed the above files.
 RUN go build -v -o /run-app .

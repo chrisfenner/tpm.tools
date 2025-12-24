@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    /* Language and Platform */
+    "target": "es6",
+    "module": "es6",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+
+    /* Paths */
+    "rootDir": ".",
+    "outDir": "./dist",
+
+    /* Module Resolution */
+    "moduleResolution": "node",
+
+    /* Emit */
+    "declaration": true, // useful for creating a package of your generated types
+    "sourceMap": true
+
+    /* Important for Protobuf generated files */
+    // Ensure the TS compiler can find the generated files, often in a specific output directory
+    // "resolveJsonModule": true // might be needed depending on generator
+  },
+  "include": ["ts/*", "proto/*.ts"]
+  // "exclude": ["node_modules"]
+}

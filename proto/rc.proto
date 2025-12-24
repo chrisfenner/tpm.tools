@@ -1,0 +1,16 @@
+syntax = "proto3";
+package tpmtools;
+option go_package = "github.com/chrisfenner/tpm.tools/proto";
+
+message ReturnCodeLookupRequest {
+    string query = 1;
+}
+
+message ReturnCodeLookupResult {
+    string name = 1;
+    int32 value = 2;
+}
+
+message ReturnCodeLookupResponse {
+    repeated ReturnCodeLookupResult result = 1;
+}
