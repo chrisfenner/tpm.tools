@@ -72,6 +72,11 @@ header {
   margin-right: 1ch;
 }
 
+.logo div img {
+  height: 5lh;
+  width: 5lh;
+}
+
 .appcontainer {
   height: 6lh;
   display: flex;
