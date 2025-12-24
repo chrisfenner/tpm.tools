@@ -121,6 +121,7 @@ footer {
   justify-content: center;
   height: 1.5lh;
   background: var(--background1);
+  font-size: 8pt;
 }
 .pagefoot {
   height: 1lh;
