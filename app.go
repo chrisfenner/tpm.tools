@@ -30,8 +30,6 @@ func main() {
 
 	}
 
-	http.HandleFunc("/styles.css", httphelpers.StaticallyServe(statics, "statics/styles.css", "text/css"))
-	http.HandleFunc("/media/logo-small.png", httphelpers.StaticallyServe(statics, "statics/media/logo-small.png", "image/png"))
 	http.HandleFunc("/manifest.json", httphelpers.StaticallyServe(statics, "statics/manifest.json", "application/manifest+json"))
 	http.HandleFunc("/media/favicon-192.png", httphelpers.StaticallyServe(statics, "statics/media/favicon-192.png", "image/png"))
 	http.HandleFunc("/media/favicon-512.png", httphelpers.StaticallyServe(statics, "statics/media/favicon-512.png", "image/png"))

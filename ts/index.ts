@@ -2,13 +2,26 @@ import { ReturnCodeLookupRequest } from "../proto/rc";
 import { ReturnCodeLookupResult } from "../proto/rc";
 import { ReturnCodeLookupResponse } from "../proto/rc";
 
+import "./styles.css";
+
 // Ensure this function is globally accessible if using `onclick` in HTML
 export async function lookupReturnCode() {
   // Get the input element and cast it to HTMLInputElement
   const inputElement = document.getElementById(
     "rc-query-input"
   ) as HTMLInputElement;
+
+  const resultsElement = document.getElementById(
+    "rc-results"
+  ) as HTMLDivElement;
+
   const inputValue: string = inputElement.value;
+
+  // All TPM error codes are 3-digit hexadecimal numbers.
+  if (inputValue.length != 3) {
+    resultsElement.textContent = "";
+    return;
+  }
 
   // Define the data payload
   const req: ReturnCodeLookupRequest = {
@@ -35,15 +48,12 @@ export async function lookupReturnCode() {
 
     const rsp = ReturnCodeLookupResponse.fromBinary(result);
 
-    const resultsElement = document.getElementById(
-      "rc-results"
-    ) as HTMLDivElement;
-
     resultsElement.textContent = "";
 
     rsp.result.forEach((res: ReturnCodeLookupResult) => {
       const newDiv = document.createElement("div");
       newDiv.setAttribute("class", "rc-result");
+      newDiv.setAttribute("box-", "square");
 
       const newDivCodeName = document.createElement("span");
       newDivCodeName.textContent = "Name: " + res.name;
@@ -61,11 +71,11 @@ export async function lookupReturnCode() {
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  const queryButton = document.getElementById(
-    "rc-query-button"
-  ) as HTMLButtonElement | null;
+  const queryInput = document.getElementById(
+    "rc-query-input"
+  ) as HTMLInputElement | null;
 
-  if (queryButton) {
-    queryButton.onclick = lookupReturnCode;
+  if (queryInput) {
+    queryInput.oninput = lookupReturnCode;
   }
 });
