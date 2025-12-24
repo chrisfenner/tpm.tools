@@ -3,9 +3,11 @@
   {{template "head"}}
   <body>
     {{template "header"}}
-    <div class="content">
-      <h1>Welcome</h1>
-      Click on a tool above to get started.
+    <div box-="square" shear-="top">
+      <div class="header">
+        <span is-="badge" variant-="background0">Welcome</span>
+      </div>
+      <div id="content">Click on a tool above to get started.</div>
     </div>
     {{template "footer"}}
   </body>
