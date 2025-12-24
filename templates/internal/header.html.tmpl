@@ -1,17 +1,19 @@
 {{ define "header" }}
 <header>
   <div class="navhead">
-    <a href="/">
-      <img
-        src="/media/logo-small.png"
-        style="display: block"
-        width="195pt"
-        height="37pt"
-      />
-    </a>
-    <a href="/rc" class="app">
-      <div>RC</div>
-    </a>
+    <div class="logo">
+      <a href="/">
+        <div>
+          <img src="/media/favicon-192.png" />
+          <span>tpm.tools</span>
+        </div>
+      </a>
+    </div>
+    <div class="appcontainer">
+      <a href="/rc" class="app rc">
+        <div box-="round">RC Decoder</div>
+      </a>
+    </div>
   </div>
 </header>
 {{ end }}

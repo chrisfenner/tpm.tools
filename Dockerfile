@@ -3,16 +3,15 @@
 FROM node:25-trixie AS builder_npm
 
 WORKDIR /usr/src/app
-RUN npm install clean-css-cli -g
 RUN npm install @protobuf-ts/plugin protoc
-RUN npm install -D typescript ts-loader
-RUN npm install --save-dev webpack webpack-cli
-RUN npm install --save-dev @types/node
+RUN npm install typescript ts-loader
+RUN npm install webpack webpack-cli
+RUN npm install css-loader style-loader
+RUN npm install @types/node
+RUN npm install @webtui/css
+RUN npm install @webtui/theme-catppuccin
 
 COPY . .
-
-# Minify the CSS file in-place.
-RUN cleancss -o statics/styles.css statics/styles.css
 
 # Compile the protobufs into the proto directory
 RUN npx protoc --ts_out proto/ --proto_path proto proto/rc.proto
@@ -20,7 +19,7 @@ RUN npx protoc --ts_out proto/ --proto_path proto proto/rc.proto
 # Compile the TypeScript
 # RUN tsc --project ./tsconfig.json --outDir generated/js
 
-# Build the js bundle using webpack
+# Build the js+css bundle using webpack
 RUN npx webpack-cli -c ./webpack.config.js
 RUN ls dist/bundle.js
 

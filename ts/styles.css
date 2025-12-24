@@ -1,0 +1,128 @@
+@layer base, utils, components;
+
+@import "@webtui/css/base.css";
+
+@import "@webtui/css/utils/box.css";
+@import "@webtui/css/components/badge.css";
+@import "@webtui/css/components/button.css";
+@import "@webtui/css/components/typography.css";
+@import "@webtui/css/components/input.css";
+@import "@webtui/theme-catppuccin";
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+#content {
+  padding: 0lh 1ch;
+  padding-top: 1lh;
+  display: flex;
+  flex-direction: column;
+  gap: 1lh;
+}
+#buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+input {
+  background-color: var(--background0);
+}
+
+html {
+  height: 100vh;
+}
+
+body {
+  display: flex;
+  max-width: 80ch;
+  height: 100%;
+  margin: auto;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.row {
+  display: flex;
+}
+
+a:link {
+  color: var(--mauve);
+}
+a:visited {
+  color: var(--lavender);
+}
+a:hover {
+  color: var(--pink);
+}
+
+header {
+  height: 7lh;
+}
+
+.navhead {
+  height: 100%;
+  display: flex;
+}
+
+.logo div {
+  height: 6lh;
+  display: flex;
+  flex-direction: column;
+  margin-right: 1ch;
+}
+
+.appcontainer {
+  height: 6lh;
+  display: flex;
+  justify-content: space-around;
+}
+
+.app {
+  height: 3lh;
+  margin: auto;
+  --box-border-color: var(--appcolor);
+}
+
+.app * {
+  color: var(--appcolor);
+}
+
+.app.rc {
+  --appcolor: var(--red);
+}
+
+.app:hover {
+  --appcolor: var(--pink);
+}
+
+.navhead a {
+  text-decoration: none;
+}
+
+.logo div span {
+  margin: auto;
+}
+
+.logo img {
+  height: 5lh;
+}
+
+.rc-result {
+  display: flex;
+  flex-direction: column;
+  padding-left: 2ch;
+}
+
+footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 1.5lh;
+  background: var(--background1);
+}
+.pagefoot {
+  height: 1lh;
+  margin: auto;
+}
