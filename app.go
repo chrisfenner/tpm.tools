@@ -12,6 +12,7 @@ import (
 	"google.golang.org/protobuf/proto"
 
 	"github.com/chrisfenner/tpm.tools/pkg/httphelpers"
+	"github.com/chrisfenner/tpm.tools/pkg/rc"
 )
 
 //go:embed generated/*.html
@@ -57,22 +58,17 @@ func main() {
 			return
 		}
 
-		// TODO: Actual business logic
-		// For now, try to parse the query for a hex number.
-		// Any error, just use 0.
+		rsp := ttpb.ReturnCodeLookupResponse{}
+
 		var queryValue int64
 		queryValue, err = strconv.ParseInt(req.Query, 16, 32)
-		if err != nil {
-			queryValue = 0
-		}
-
-		rsp := ttpb.ReturnCodeLookupResponse{
-			Result: []*ttpb.ReturnCodeLookupResult{
-				&ttpb.ReturnCodeLookupResult{
-					Name:  "TEST",
-					Value: int32(queryValue),
-				},
-			},
+		// If we were able to parse the input as a hex integer, move right along.
+		if err == nil {
+			results, err := rc.LookupResponseCodeByValue(int32(queryValue))
+			// We don't actually care about errors looking up the RC.
+			if err == nil && len(results) > 0 {
+				rsp.Result = results
+			}
 		}
 
 		rspData, err := proto.Marshal(&rsp)

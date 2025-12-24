@@ -54,14 +54,7 @@ export async function lookupReturnCode() {
       const newDiv = document.createElement("div");
       newDiv.setAttribute("class", "rc-result");
       newDiv.setAttribute("box-", "square");
-
-      const newDivCodeName = document.createElement("span");
-      newDivCodeName.textContent = "Name: " + res.name;
-      const newDivCodeValue = document.createElement("span");
-      newDivCodeValue.textContent = "Value: " + res.value;
-
-      newDiv.appendChild(newDivCodeName);
-      newDiv.appendChild(newDivCodeValue);
+      newDiv.textContent = res.description;
       resultsElement.appendChild(newDiv);
     });
   } catch (error) {

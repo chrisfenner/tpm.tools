@@ -7,8 +7,7 @@ message ReturnCodeLookupRequest {
 }
 
 message ReturnCodeLookupResult {
-    string name = 1;
-    int32 value = 2;
+    string description = 1;
 }
 
 message ReturnCodeLookupResponse {
