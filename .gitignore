@@ -36,3 +36,13 @@ go.work.sum
 
 # Generated HTML files
 /generated/*
+
+# Generated protos. This is handled during Docker build, but these files may
+# be present for the convenience of development.
+/proto/*.pb.go
+/proto/*.ts
+
+# Node stuff. This is all taken care of by Docker too.
+/node_modules
+/package-lock.json
+/package.json
