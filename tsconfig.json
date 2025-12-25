@@ -17,11 +17,10 @@
 
     /* Emit */
     "declaration": true, // useful for creating a package of your generated types
-    "sourceMap": true
+    "sourceMap": true,
 
-    /* Important for Protobuf generated files */
-    // Ensure the TS compiler can find the generated files, often in a specific output directory
-    // "resolveJsonModule": true // might be needed depending on generator
+    /* Because of bundling, we import a css file for side effects and it's not a real module. */
+    "noUncheckedSideEffectImports": false
   },
   "include": ["ts/*", "proto/*.ts"]
   // "exclude": ["node_modules"]
