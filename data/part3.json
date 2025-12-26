@@ -1,0 +1,5524 @@
+{
+  "Startup": {
+    "name": "TPM2_Startup",
+    "tag": "TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": false,
+    "code": "TPM_CC_Startup",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM_SU",
+          "name": "startupType",
+          "desc": "TPM_SU_CLEAR or TPM_SU_STATE"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "Shutdown": {
+    "name": "TPM2_Shutdown",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_Shutdown",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM_SU",
+          "name": "shutdownType",
+          "desc": "TPM_SU_CLEAR or TPM_SU_STATE"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "SelfTest": {
+    "name": "TPM2_SelfTest",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_SelfTest",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMI_YES_NO",
+          "name": "fullTest",
+          "desc": "YES if full test to be performed  NO if only test of untested functions required"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "IncrementalSelfTest": {
+    "name": "TPM2_IncrementalSelfTest",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_IncrementalSelfTest",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPML_ALG",
+          "name": "toTest",
+          "desc": "list of algorithms that should be tested"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPML_ALG",
+          "name": "toDoList",
+          "desc": "list of algorithms that need testing"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "GetTestResult": {
+    "name": "TPM2_GetTestResult",
+    "tag": "TPM_ST_SESSIONS if an audit or encrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_GetTestResult",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "outData",
+          "desc": "test result data  contains manufacturer-specific information"
+        },
+        {
+          "type": "TPM_RC",
+          "name": "testResult",
+          "desc": "the result of a test started via TPM2_SelfTest()  TPM_RC_NEEDS_TEST if a test has not yet been run  TPM_RC_TESTING if a test is currently running"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "StartAuthSession": {
+    "name": "TPM2_StartAuthSession",
+    "tag": "TPM_ST_SESSIONS if an audit, encrypt, or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_StartAuthSession",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT+",
+          "name": "tpmKey",
+          "desc": "handle of a loaded decrypt key used to encrypt *salt*  ::: Deprecated ::::::::::::::::::::::::::::::::::::::: It is deprecated to allow *tpmKey* to be an unrestricted key. See Part 0. ::::::::::::::::::::::::::::::::::::::::::::::::::::::  may be TPM_RH_NULL"
+        },
+        {
+          "type": "TPMI_DH_ENTITY+",
+          "name": "bind",
+          "desc": "entity providing the *authValue*  may be TPM_RH_NULL"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_NONCE",
+          "name": "nonceCaller",
+          "desc": "initial *nonceCaller,* sets nonceTPM size for the session  shall be at least 16 octets"
+        },
+        {
+          "type": "TPM2B_ENCRYPTED_SECRET",
+          "name": "encryptedSalt",
+          "desc": "value encrypted according to the type of *tpmKey*  If *tpmKey* is TPM_RH_NULL, this shall be the Empty Buffer."
+        },
+        {
+          "type": "TPM_SE",
+          "name": "sessionType",
+          "desc": "indicates the type of the session; simple HMAC or policy (including a trial policy)"
+        },
+        {
+          "type": "TPMT_SYM_DEF+",
+          "name": "symmetric",
+          "desc": "the algorithm and key size for parameter encryption  may select TPM_ALG_NULL"
+        },
+        {
+          "type": "TPMI_ALG_HASH",
+          "name": "authHash",
+          "desc": "hash algorithm to use for the session  Shall be a hash algorithm supported by the TPM and not TPM_ALG_NULL"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [
+        {
+          "type": "TPMI_SH_AUTH_SESSION",
+          "name": "sessionHandle",
+          "desc": "handle for the newly created session"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_NONCE",
+          "name": "nonceTPM",
+          "desc": "the initial nonce from the TPM, used in the computation of the *sessionKey*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "PolicyRestart": {
+    "name": "TPM2_PolicyRestart",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyRestart",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "sessionHandle",
+          "desc": "the handle for the policy session"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "Create": {
+    "name": "TPM2_Create",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_Create",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "parentHandle",
+          "desc": "handle of parent for new object",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_SENSITIVE_CREATE",
+          "name": "inSensitive",
+          "desc": "the sensitive data"
+        },
+        {
+          "type": "TPM2B_PUBLIC",
+          "name": "inPublic",
+          "desc": "the public template"
+        },
+        {
+          "type": "TPM2B_DATA",
+          "name": "outsideInfo",
+          "desc": "data that will be included in the creation data for this object to provide permanent, verifiable linkage between this object and some object owner data"
+        },
+        {
+          "type": "TPML_PCR_SELECTION",
+          "name": "creationPCR",
+          "desc": "PCR that will be used in creation data"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_PRIVATE",
+          "name": "outPrivate",
+          "desc": "the private portion of the object"
+        },
+        {
+          "type": "TPM2B_PUBLIC",
+          "name": "outPublic",
+          "desc": "the public portion of the created object"
+        },
+        {
+          "type": "TPM2B_CREATION_DATA",
+          "name": "creationData",
+          "desc": "contains a TPMS_CREATION_DATA"
+        },
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "creationHash",
+          "desc": "digest of *creationData.creationData* using *nameAlg* of *outPublic*"
+        },
+        {
+          "type": "TPMT_TK_CREATION",
+          "name": "creationTicket",
+          "desc": "ticket used by TPM2_CertifyCreation() to validate that the creation data was produced by the TPM"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "Load": {
+    "name": "TPM2_Load",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_Load",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "parentHandle",
+          "desc": "TPM handle of parent key; shall not be a reserved handle",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_PRIVATE",
+          "name": "inPrivate",
+          "desc": "the private portion of the object"
+        },
+        {
+          "type": "TPM2B_PUBLIC",
+          "name": "inPublic",
+          "desc": "the public portion of the object"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [
+        {
+          "type": "TPM_HANDLE",
+          "name": "objectHandle",
+          "desc": "handle of type TPM_HT_TRANSIENT for the loaded object"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_NAME",
+          "name": "name",
+          "desc": "Name of the loaded object"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "LoadExternal": {
+    "name": "TPM2_LoadExternal",
+    "tag": "TPM_ST_SESSIONS if an audit, encrypt, or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_LoadExternal",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_SENSITIVE",
+          "name": "inPrivate",
+          "desc": "the sensitive portion of the object (optional)"
+        },
+        {
+          "type": "TPM2B_PUBLIC+",
+          "name": "inPublic",
+          "desc": "the public portion of the object"
+        },
+        {
+          "type": "TPMI_RH_HIERARCHY",
+          "name": "hierarchy",
+          "desc": "hierarchy with which the object area is associated"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [
+        {
+          "type": "TPM_HANDLE",
+          "name": "objectHandle",
+          "desc": "handle of type TPM_HT_TRANSIENT for the loaded object"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_NAME",
+          "name": "name",
+          "desc": "Name of the loaded object"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "ReadPublic": {
+    "name": "TPM2_ReadPublic",
+    "tag": "TPM_ST_SESSIONS if an audit or encrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_ReadPublic",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "objectHandle",
+          "desc": "TPM handle of an object"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_PUBLIC",
+          "name": "outPublic",
+          "desc": "structure containing the public area of an object"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "name",
+          "desc": "Name of the object"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "qualifiedName",
+          "desc": "the Qualified Name of the object"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "ActivateCredential": {
+    "name": "TPM2_ActivateCredential",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_ActivateCredential",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "activateHandle",
+          "desc": "handle of the object associated with certificate in *credentialBlob*",
+          "auth_index": 1,
+          "auth_role": "ADMIN"
+        },
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "loaded key used to decrypt the TPMS_SENSITIVE in *credentialBlob*",
+          "auth_index": 2,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_ID_OBJECT",
+          "name": "credentialBlob",
+          "desc": "the credential"
+        },
+        {
+          "type": "TPM2B_ENCRYPTED_SECRET",
+          "name": "secret",
+          "desc": "*keyHandle* algorithm-dependent encrypted seed that protects *credentialBlob*"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "certInfo",
+          "desc": "the decrypted information  the data should be no larger than the size of the digest of the *nameAlg* associated with *keyHandle*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "MakeCredential": {
+    "name": "TPM2_MakeCredential",
+    "tag": "TPM_ST_SESSIONS if an audit, encrypt, or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_MakeCredential",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "handle",
+          "desc": "loaded public area, used to encrypt the sensitive area containing the credential key"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "credential",
+          "desc": "the credential information"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "objectName",
+          "desc": "Name of the object to which the credential applies"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ID_OBJECT",
+          "name": "credentialBlob",
+          "desc": "the credential"
+        },
+        {
+          "type": "TPM2B_ENCRYPTED_SECRET",
+          "name": "secret",
+          "desc": "*handle* algorithm-dependent data that wraps the key that encrypts *credentialBlob*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "Unseal": {
+    "name": "TPM2_Unseal",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_Unseal",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "itemHandle",
+          "desc": "handle of a loaded data object",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_SENSITIVE_DATA",
+          "name": "outData",
+          "desc": "unsealed data  Size of *outData* is limited to be no more than 128 octets."
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "ObjectChangeAuth": {
+    "name": "TPM2_ObjectChangeAuth",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_ObjectChangeAuth",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "objectHandle",
+          "desc": "handle of the object",
+          "auth_index": 1,
+          "auth_role": "ADMIN"
+        },
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "parentHandle",
+          "desc": "handle of the parent"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_AUTH",
+          "name": "newAuth",
+          "desc": "new authorization value"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_PRIVATE",
+          "name": "outPrivate",
+          "desc": "private area containing the new authorization value"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "CreateLoaded": {
+    "name": "TPM2_CreateLoaded",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_CreateLoaded",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_PARENT",
+          "name": "parentHandle",
+          "desc": "Handle of a transient storage key, a persistent storage key, TPM_RH_ENDORSEMENT, TPM_RH_OWNER, TPM_RH_PLATFORM+{PP}, or TPM_RH_NULL",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_SENSITIVE_CREATE",
+          "name": "inSensitive",
+          "desc": "the sensitive data, see TPM 2.0 Part 1 Sensitive Values"
+        },
+        {
+          "type": "TPM2B_TEMPLATE",
+          "name": "inPublic",
+          "desc": "the public template"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [
+        {
+          "type": "TPM_HANDLE",
+          "name": "objectHandle",
+          "desc": "handle of type TPM_HT_TRANSIENT for created object"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_PRIVATE",
+          "name": "outPrivate",
+          "desc": "the sensitive area of the object (optional)"
+        },
+        {
+          "type": "TPM2B_PUBLIC",
+          "name": "outPublic",
+          "desc": "the public portion of the created object"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "name",
+          "desc": "the Name of the created object"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "Duplicate": {
+    "name": "TPM2_Duplicate",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_Duplicate",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "objectHandle",
+          "desc": "loaded object to duplicate",
+          "auth_index": 1,
+          "auth_role": "DUP"
+        },
+        {
+          "type": "TPMI_DH_OBJECT+",
+          "name": "newParentHandle",
+          "desc": "shall reference the public area of an asymmetric key"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DATA",
+          "name": "encryptionKeyIn",
+          "desc": "optional symmetric encryption key  The size for this key is set to zero when the TPM is to generate the key. This parameter may be encrypted."
+        },
+        {
+          "type": "TPMT_SYM_DEF_OBJECT+",
+          "name": "symmetricAlg",
+          "desc": "definition for the symmetric algorithm to be used for the inner wrapper  may be TPM_ALG_NULL if no inner wrapper is applied"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_DATA",
+          "name": "encryptionKeyOut",
+          "desc": "If the caller provided an encryption key or if *symmetricAlg* was TPM_ALG_NULL, then this will be the Empty Buffer; otherwise, it shall contain the TPM- generated, symmetric encryption key for the inner wrapper."
+        },
+        {
+          "type": "TPM2B_PRIVATE",
+          "name": "duplicate",
+          "desc": "private area that may be encrypted by *encryptionKeyIn*; and may be doubly encrypted"
+        },
+        {
+          "type": "TPM2B_ENCRYPTED_SECRET",
+          "name": "outSymSeed",
+          "desc": "seed protected by the asymmetric algorithms of new parent (NP)"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "Rewrap": {
+    "name": "TPM2_Rewrap",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_Rewrap",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT+",
+          "name": "oldParent",
+          "desc": "parent of object",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_DH_OBJECT+",
+          "name": "newParent",
+          "desc": "new parent of the object"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_PRIVATE",
+          "name": "inDuplicate",
+          "desc": "an object encrypted using symmetric key derived from *inSymSeed*"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "name",
+          "desc": "the Name of the object being rewrapped"
+        },
+        {
+          "type": "TPM2B_ENCRYPTED_SECRET",
+          "name": "inSymSeed",
+          "desc": "the seed for the symmetric key and HMAC key  needs *oldParent* private key to recover the seed and generate the symmetric key"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_PRIVATE",
+          "name": "outDuplicate",
+          "desc": "an object encrypted using symmetric key derived from *outSymSeed*"
+        },
+        {
+          "type": "TPM2B_ENCRYPTED_SECRET",
+          "name": "outSymSeed",
+          "desc": "seed for a symmetric key protected by *newParent* asymmetric key"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "Import": {
+    "name": "TPM2_Import",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_Import",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "parentHandle",
+          "desc": "the handle of the new parent for the object",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DATA",
+          "name": "encryptionKey",
+          "desc": "the optional symmetric encryption key used as the inner wrapper for *duplicate*  If *symmetricAlg* is TPM_ALG_NULL, then this parameter shall be the Empty Buffer."
+        },
+        {
+          "type": "TPM2B_PUBLIC",
+          "name": "objectPublic",
+          "desc": "the public area of the object to be imported  This is provided so that the integrity value for *duplicate* and the object attributes can be checked.  NOTE Even if the integrity value of the object is not checked on input, the object Name is required to create the integrity value for the imported object."
+        },
+        {
+          "type": "TPM2B_PRIVATE",
+          "name": "duplicate",
+          "desc": "the symmetrically encrypted duplicate object that may contain an inner symmetric wrapper"
+        },
+        {
+          "type": "TPM2B_ENCRYPTED_SECRET",
+          "name": "inSymSeed",
+          "desc": "the seed for the symmetric key and HMAC key  *inSymSeed* is encrypted/encoded using the algorithms of *newParent*."
+        },
+        {
+          "type": "TPMT_SYM_DEF_OBJECT+",
+          "name": "symmetricAlg",
+          "desc": "definition for the symmetric algorithm to use for the inner wrapper  If this algorithm is TPM_ALG_NULL, no inner wrapper is present and *encryptionKey* shall be the Empty Buffer."
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_PRIVATE",
+          "name": "outPrivate",
+          "desc": "the sensitive area encrypted with the symmetric key of *parentHandle*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "RSA_Encrypt": {
+    "name": "TPM2_RSA_Encrypt",
+    "tag": "TPM_ST_SESSIONS if an audit, encrypt, or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_RSA_Encrypt",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "reference to public portion of RSA key to use for encryption"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_PUBLIC_KEY_RSA",
+          "name": "message",
+          "desc": "message to be encrypted  NOTE The data type was chosen because it limits the overall size of the input to no greater than the size of the largest RSA public key. This may be larger than allowed for *keyHandle*."
+        },
+        {
+          "type": "TPMT_RSA_DECRYPT+",
+          "name": "inScheme",
+          "desc": "the padding scheme to use if *scheme* associated with *keyHandle* is TPM_ALG_NULL"
+        },
+        {
+          "type": "TPM2B_DATA",
+          "name": "label",
+          "desc": "optional label *L* to be associated with the message  Size of the buffer is zero if no label is present  NOTE See the description of *label* above."
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_PUBLIC_KEY_RSA",
+          "name": "outData",
+          "desc": "encrypted output"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "RSA_Decrypt": {
+    "name": "TPM2_RSA_Decrypt",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_RSA_Decrypt",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "RSA key to use for decryption",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_PUBLIC_KEY_RSA",
+          "name": "cipherText",
+          "desc": "cipher text to be decrypted  NOTE An encrypted RSA data block is the size of the public modulus."
+        },
+        {
+          "type": "TPMT_RSA_DECRYPT+",
+          "name": "inScheme",
+          "desc": "the padding scheme to use if *scheme* associated with *keyHandle* is TPM_ALG_NULL"
+        },
+        {
+          "type": "TPM2B_DATA",
+          "name": "label",
+          "desc": "label whose association with the message is to be verified"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_PUBLIC_KEY_RSA",
+          "name": "message",
+          "desc": "decrypted output"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "ECDH_KeyGen": {
+    "name": "TPM2_ECDH_KeyGen",
+    "tag": "TPM_ST_SESSIONS if an audit or encrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_ECDH_KeyGen",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "Handle of a loaded ECC key public area."
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "zPoint",
+          "desc": "results of $P ≔ h[d_e]Q_s$"
+        },
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "pubPoint",
+          "desc": "generated ephemeral public point ($Q_e$)"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "ECDH_ZGen": {
+    "name": "TPM2_ECDH_ZGen",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_ECDH_ZGen",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "handle of a loaded ECC key",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "inPoint",
+          "desc": "a public key"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "outPoint",
+          "desc": "X and Y coordinates of the product of the multiplication $Z = (x_Z, y_Z) ≔ h[d_s]Q_B$"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "ECC_Parameters": {
+    "name": "TPM2_ECC_Parameters",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_ECC_Parameters",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMI_ECC_CURVE",
+          "name": "curveID",
+          "desc": "parameter set selector"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMS_ALGORITHM_DETAIL_ECC",
+          "name": "parameters",
+          "desc": "ECC parameters for the selected curve"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "ZGen_2Phase": {
+    "name": "TPM2_ZGen_2Phase",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_ZGen_2Phase",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyA",
+          "desc": "handle of an unrestricted ECC decryption key  The private key referenced by this handle is used as $d_{s,A}$",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "inQsB",
+          "desc": "other party's static public key ($Q_{s,B} = (X_{s,B}, Y_{s,B})$)"
+        },
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "inQeB",
+          "desc": "other party's ephemeral public key ($Q_{e,B} = (X_{e,B}, Y_{e,B})$)"
+        },
+        {
+          "type": "TPMI_ECC_KEY_EXCHANGE",
+          "name": "inScheme",
+          "desc": "the key exchange scheme"
+        },
+        {
+          "type": "UINT16",
+          "name": "counter",
+          "desc": "value returned by TPM2_EC_Ephemeral()"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "outZ1",
+          "desc": "X and Y coordinates of the computed value (scheme dependent)"
+        },
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "outZ2",
+          "desc": "X and Y coordinates of the second computed value (scheme dependent)"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "ECC_Encrypt": {
+    "name": "TPM2_ECC_Encrypt",
+    "tag": "TPM_ST_SESSIONS if an audit, encrypt, or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_ECC_Encrypt",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "reference to the public portion of ECC key to use for encryption"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "plainText",
+          "desc": "Plaintext to be encrypted"
+        },
+        {
+          "type": "TPMT_KDF_SCHEME+",
+          "name": "inScheme",
+          "desc": "the KDF to use if *scheme* associated with *keyHandle* is TPM_ALG_NULL"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "C1",
+          "desc": "the public ephemeral key used for ECDH"
+        },
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "C2",
+          "desc": "the data block produced by the XOR process"
+        },
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "C3",
+          "desc": "the integrity value"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "ECC_Decrypt": {
+    "name": "TPM2_ECC_Decrypt",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_ECC_Decrypt",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "ECC key to use for decryption",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "C1",
+          "desc": "the public ephemeral key used for ECDH"
+        },
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "C2",
+          "desc": "the data block produced by the XOR process"
+        },
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "C3",
+          "desc": "the integrity value"
+        },
+        {
+          "type": "TPMT_KDF_SCHEME+",
+          "name": "inScheme",
+          "desc": "the KDF to use if *scheme* associated with *keyHandle* is TPM_ALG_NULL"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "plainText",
+          "desc": "decrypted output"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "Encapsulate": {
+    "name": "TPM2_Encapsulate",
+    "tag": "TPM_ST_SESSIONS if an audit or encrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_Encapsulate",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "reference to public portion of KEM key to use for encapsulation"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_SHARED_SECRET",
+          "name": "sharedSecret",
+          "desc": "random secret shared between both parties"
+        },
+        {
+          "type": "TPM2B_KEM_CIPHERTEXT",
+          "name": "ciphertext",
+          "desc": "encapsulated ciphertext that can be decapsulated with the private key to produce *sharedSecret*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "Decapsulate": {
+    "name": "TPM2_Decapsulate",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_Decapsulate",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "reference to loaded KEM key to use for decapsulation",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_KEM_CIPHERTEXT",
+          "name": "ciphertext",
+          "desc": "encapsulated ciphertext"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_SHARED_SECRET",
+          "name": "sharedSecret",
+          "desc": "decapsulated shared secret"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "EncryptDecrypt": {
+    "name": "TPM2_EncryptDecrypt",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_EncryptDecrypt",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "the symmetric key used for the operation",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPMI_YES_NO",
+          "name": "decrypt",
+          "desc": "if YES, then the operation is decryption; if NO, the operation is encryption"
+        },
+        {
+          "type": "TPMI_ALG_CIPHER_MODE+",
+          "name": "mode",
+          "desc": "symmetric encryption/decryption mode  this field shall match the default mode of the key or be TPM_ALG_NULL."
+        },
+        {
+          "type": "TPM2B_IV",
+          "name": "ivIn",
+          "desc": "an initial value as required by the algorithm"
+        },
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "inData",
+          "desc": "the data to be encrypted/decrypted"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "outData",
+          "desc": "encrypted or decrypted output"
+        },
+        {
+          "type": "TPM2B_IV",
+          "name": "ivOut",
+          "desc": "chaining value to use for IV in next round"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "EncryptDecrypt2": {
+    "name": "TPM2_EncryptDecrypt2",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_EncryptDecrypt2",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "the symmetric key used for the operation",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "inData",
+          "desc": "the data to be encrypted/decrypted"
+        },
+        {
+          "type": "TPMI_YES_NO",
+          "name": "decrypt",
+          "desc": "if YES, then the operation is decryption; if NO, the operation is encryption"
+        },
+        {
+          "type": "TPMI_ALG_CIPHER_MODE+",
+          "name": "mode",
+          "desc": "symmetric mode  this field shall match the default mode of the key or be TPM_ALG_NULL."
+        },
+        {
+          "type": "TPM2B_IV",
+          "name": "ivIn",
+          "desc": "an initial value as required by the algorithm"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "outData",
+          "desc": "encrypted or decrypted output"
+        },
+        {
+          "type": "TPM2B_IV",
+          "name": "ivOut",
+          "desc": "chaining value to use for IV in next round"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "Hash": {
+    "name": "TPM2_Hash",
+    "tag": "TPM_ST_SESSIONS if an audit, encrypt, or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_Hash",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "data",
+          "desc": "data to be hashed"
+        },
+        {
+          "type": "TPMI_ALG_HASH",
+          "name": "hashAlg",
+          "desc": "algorithm for the hash being computed - shall not be TPM_ALG_NULL"
+        },
+        {
+          "type": "TPMI_RH_HIERARCHY",
+          "name": "hierarchy",
+          "desc": "hierarchy to use for the ticket"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "outHash",
+          "desc": "results"
+        },
+        {
+          "type": "TPMT_TK_HASHCHECK",
+          "name": "validation",
+          "desc": "ticket indicating that the sequence of octets used to compute *outHash* did not start with TPM_GENERATED_VALUE  will be a NULL ticket if the digest may not be signed with a restricted key"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "HMAC": {
+    "name": "TPM2_HMAC",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_HMAC",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "handle",
+          "desc": "handle for the symmetric signing key providing the HMAC key",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "buffer",
+          "desc": "HMAC data"
+        },
+        {
+          "type": "TPMI_ALG_HASH+",
+          "name": "hashAlg",
+          "desc": "algorithm to use for HMAC"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "outHMAC",
+          "desc": "the returned HMAC in a sized buffer"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "MAC": {
+    "name": "TPM2_MAC",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_MAC",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "handle",
+          "desc": "handle for the symmetric signing key providing the MAC key",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "buffer",
+          "desc": "MAC data"
+        },
+        {
+          "type": "TPMI_ALG_MAC_SCHEME+",
+          "name": "inScheme",
+          "desc": "algorithm to use for MAC"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "outMAC",
+          "desc": "the returned MAC in a sized buffer"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "GetRandom": {
+    "name": "TPM2_GetRandom",
+    "tag": "TPM_ST_SESSIONS if an audit or encrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_GetRandom",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "UINT16",
+          "name": "bytesRequested",
+          "desc": "number of octets to return"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "randomBytes",
+          "desc": "the random octets"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "StirRandom": {
+    "name": "TPM2_StirRandom",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_StirRandom",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_SENSITIVE_DATA",
+          "name": "inData",
+          "desc": "additional input, as defined in SP 800-90A."
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "HMAC_Start": {
+    "name": "TPM2_HMAC_Start",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_HMAC_Start",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "handle",
+          "desc": "handle of an HMAC key",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_AUTH",
+          "name": "auth",
+          "desc": "authorization value for subsequent use of the sequence"
+        },
+        {
+          "type": "TPMI_ALG_HASH+",
+          "name": "hashAlg",
+          "desc": "the hash algorithm to use for the HMAC"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "sequenceHandle",
+          "desc": "a handle to reference the sequence"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "MAC_Start": {
+    "name": "TPM2_MAC_Start",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_MAC_Start",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "handle",
+          "desc": "handle of a MAC key",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_AUTH",
+          "name": "auth",
+          "desc": "authorization value for subsequent use of the sequence"
+        },
+        {
+          "type": "TPMI_ALG_MAC_SCHEME+",
+          "name": "inScheme",
+          "desc": "the algorithm to use for the MAC"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "sequenceHandle",
+          "desc": "a handle to reference the sequence"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "HashSequenceStart": {
+    "name": "TPM2_HashSequenceStart",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_HashSequenceStart",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_AUTH",
+          "name": "auth",
+          "desc": "authorization value for subsequent use of the sequence"
+        },
+        {
+          "type": "TPMI_ALG_HASH+",
+          "name": "hashAlg",
+          "desc": "the hash algorithm to use for the hash sequence  An Event Sequence starts if this is TPM_ALG_NULL."
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "sequenceHandle",
+          "desc": "a handle to reference the sequence"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "SignVerifySequenceStart": {
+    "name": "TPM2_SignVerifySequenceStart",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_SignVerifySequenceStart",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "handle of a signing or verification key"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_AUTH",
+          "name": "auth",
+          "desc": "authorization value for subsequent use of the sequence"
+        },
+        {
+          "type": "TPM2B_SIGNATURE_CTX",
+          "name": "context",
+          "desc": "additional context (requires a supporting signing scheme)  depending on the scheme, *context* may be optional, i.e., zero-length."
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "sequenceHandle",
+          "desc": "a handle to reference the sequence"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "SequenceUpdate": {
+    "name": "TPM2_SequenceUpdate",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_SequenceUpdate",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "sequenceHandle",
+          "desc": "handle for the sequence object",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "buffer",
+          "desc": "data to be added to hash"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "SequenceComplete": {
+    "name": "TPM2_SequenceComplete",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_SequenceComplete",
+    "modifiers": [
+      "F"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "sequenceHandle",
+          "desc": "authorization for the sequence",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "buffer",
+          "desc": "data to be added to the hash/HMAC"
+        },
+        {
+          "type": "TPMI_RH_HIERARCHY",
+          "name": "hierarchy",
+          "desc": "hierarchy of the ticket for a hash"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "result",
+          "desc": "the returned HMAC or digest in a sized buffer"
+        },
+        {
+          "type": "TPMT_TK_HASHCHECK",
+          "name": "validation",
+          "desc": "ticket indicating that the sequence of octets used to compute *result* did not start with TPM_GENERATED_VALUE  This is a NULL Ticket when the sequence is HMAC."
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "EventSequenceComplete": {
+    "name": "TPM2_EventSequenceComplete",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_EventSequenceComplete",
+    "modifiers": [
+      "NV",
+      "F"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_PCR+",
+          "name": "pcrHandle",
+          "desc": "PCR to be extended with the Event data",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "sequenceHandle",
+          "desc": "authorization for the sequence",
+          "auth_index": 2,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "buffer",
+          "desc": "data to be added to the Event"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPML_DIGEST_VALUES",
+          "name": "results",
+          "desc": "list of digests computed for the PCR"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "Certify": {
+    "name": "TPM2_Certify",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_Certify",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "objectHandle",
+          "desc": "handle of the object to be certified",
+          "auth_index": 1,
+          "auth_role": "ADMIN"
+        },
+        {
+          "type": "TPMI_DH_OBJECT+",
+          "name": "signHandle",
+          "desc": "handle of the key used to sign the attestation structure",
+          "auth_index": 2,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DATA",
+          "name": "qualifyingData",
+          "desc": "user provided qualifying data"
+        },
+        {
+          "type": "TPMT_SIG_SCHEME+",
+          "name": "inScheme",
+          "desc": "signing scheme to use if the *scheme* for *signHandle* is TPM_ALG_NULL"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ATTEST",
+          "name": "certifyInfo",
+          "desc": "the structure that was signed"
+        },
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "the asymmetric signature over *certifyInfo* using the key referenced by *signHandle*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "CertifyCreation": {
+    "name": "TPM2_CertifyCreation",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_CertifyCreation",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT+",
+          "name": "signHandle",
+          "desc": "handle of the key that will sign the attestation block",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "objectHandle",
+          "desc": "the object associated with the creation data"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DATA",
+          "name": "qualifyingData",
+          "desc": "user-provided qualifying data"
+        },
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "creationHash",
+          "desc": "hash of the creation data produced by TPM2_Create() or TPM2_CreatePrimary()"
+        },
+        {
+          "type": "TPMT_SIG_SCHEME+",
+          "name": "inScheme",
+          "desc": "signing scheme to use if the *scheme* for *signHandle* is TPM_ALG_NULL"
+        },
+        {
+          "type": "TPMT_TK_CREATION",
+          "name": "creationTicket",
+          "desc": "ticket produced by TPM2_Create() or TPM2_CreatePrimary()"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ATTEST",
+          "name": "certifyInfo",
+          "desc": "the structure that was signed"
+        },
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "the signature over *certifyInfo*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "Quote": {
+    "name": "TPM2_Quote",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_Quote",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT+",
+          "name": "signHandle",
+          "desc": "handle of key that will perform signature",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DATA",
+          "name": "qualifyingData",
+          "desc": "data supplied by the caller"
+        },
+        {
+          "type": "TPMT_SIG_SCHEME+",
+          "name": "inScheme",
+          "desc": "signing scheme to use if the *scheme* for *signHandle* is TPM_ALG_NULL"
+        },
+        {
+          "type": "TPML_PCR_SELECTION",
+          "name": "PCRselect",
+          "desc": "PCR set to quote"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ATTEST",
+          "name": "quoted",
+          "desc": "the quoted information"
+        },
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "the signature over *quoted*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "GetSessionAuditDigest": {
+    "name": "TPM2_GetSessionAuditDigest",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_GetSessionAuditDigest",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_ENDORSEMENT",
+          "name": "privacyAdminHandle",
+          "desc": "handle of the privacy administrator (TPM_RH_ENDORSEMENT)",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_DH_OBJECT+",
+          "name": "signHandle",
+          "desc": "handle of the signing key",
+          "auth_index": 2,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_SH_HMAC",
+          "name": "sessionHandle",
+          "desc": "handle of the audit session"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DATA",
+          "name": "qualifyingData",
+          "desc": "user-provided qualifying data - may be zero-length"
+        },
+        {
+          "type": "TPMT_SIG_SCHEME+",
+          "name": "inScheme",
+          "desc": "signing scheme to use if the *scheme* for *signHandle* is TPM_ALG_NULL"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ATTEST",
+          "name": "auditInfo",
+          "desc": "the audit information that was signed"
+        },
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "the signature over *auditInfo*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "GetCommandAuditDigest": {
+    "name": "TPM2_GetCommandAuditDigest",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_GetCommandAuditDigest",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_ENDORSEMENT",
+          "name": "privacyHandle",
+          "desc": "handle of the privacy administrator (TPM_RH_ENDORSEMENT)",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_DH_OBJECT+",
+          "name": "signHandle",
+          "desc": "the handle of the signing key",
+          "auth_index": 2,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DATA",
+          "name": "qualifyingData",
+          "desc": "other data to associate with this audit digest"
+        },
+        {
+          "type": "TPMT_SIG_SCHEME+",
+          "name": "inScheme",
+          "desc": "signing scheme to use if the *scheme* for *signHandle* is TPM_ALG_NULL"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ATTEST",
+          "name": "auditInfo",
+          "desc": "the auditInfo that was signed"
+        },
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "the signature over *auditInfo*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "GetTime": {
+    "name": "TPM2_GetTime",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_GetTime",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_ENDORSEMENT",
+          "name": "privacyAdminHandle",
+          "desc": "handle of the privacy administrator (TPM_RH_ENDORSEMENT)",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_DH_OBJECT+",
+          "name": "signHandle",
+          "desc": "the *keyHandle* identifier of a loaded key that can perform digital signatures",
+          "auth_index": 2,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DATA",
+          "name": "qualifyingData",
+          "desc": "data to tick stamp"
+        },
+        {
+          "type": "TPMT_SIG_SCHEME+",
+          "name": "inScheme",
+          "desc": "signing scheme to use if the *scheme* for *signHandle* is TPM_ALG_NULL"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ATTEST",
+          "name": "timeInfo",
+          "desc": "standard TPM-generated attestation block"
+        },
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "the signature over *timeInfo*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "CertifyX509": {
+    "name": "TPM2_CertifyX509",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_CertifyX509",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "objectHandle",
+          "desc": "handle of the object to be certified",
+          "auth_index": 1,
+          "auth_role": "ADMIN"
+        },
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "signHandle",
+          "desc": "handle of the key used to sign the attestation structure",
+          "auth_index": 2,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DATA",
+          "name": "reserved",
+          "desc": "shall be an Empty Buffer"
+        },
+        {
+          "type": "TPMT_SIG_SCHEME+",
+          "name": "inScheme",
+          "desc": "signing scheme to use if the *scheme* for *signHandle* is TPM_ALG_NULL"
+        },
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "partialCertificate",
+          "desc": "a DER encoded partial certificate"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "addedToCertificate",
+          "desc": "a DER encoded SEQUENCE containing the DER encoded fields added to partialCertificate to make it a complete RFC 5280 TBSCertificate."
+        },
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "tbsDigest",
+          "desc": "the digest that was signed"
+        },
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "The signature over *tbsDigest*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "Commit": {
+    "name": "TPM2_Commit",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_Commit",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "signHandle",
+          "desc": "handle of the key that will be used in the signing operation",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "P1",
+          "desc": "a point (*M*) on the curve used by *signHandle*"
+        },
+        {
+          "type": "TPM2B_SENSITIVE_DATA",
+          "name": "s2",
+          "desc": "octet array used to derive x-coordinate of a base point"
+        },
+        {
+          "type": "TPM2B_ECC_PARAMETER",
+          "name": "y2",
+          "desc": "y coordinate of the point associated with *s2*"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "K",
+          "desc": "ECC point *K* ≔ \\[*ds*\\]*(x2, y2)*"
+        },
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "L",
+          "desc": "ECC point *L* ≔ \\[*r*\\]*(x2, y2)*"
+        },
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "E",
+          "desc": "ECC point *E* ≔ \\[*r*\\]*P1*"
+        },
+        {
+          "type": "UINT16",
+          "name": "counter",
+          "desc": "least-significant 16 bits of *commitCount*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "EC_Ephemeral": {
+    "name": "TPM2_EC_Ephemeral",
+    "tag": "TPM_ST_SESSIONS if an audit or encrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_EC_Ephemeral",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMI_ECC_CURVE",
+          "name": "curveID",
+          "desc": "The curve for the computed ephemeral point"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ECC_POINT",
+          "name": "Q",
+          "desc": "ephemeral public key *Q* ≔ \\[*r*\\]*G*"
+        },
+        {
+          "type": "UINT16",
+          "name": "counter",
+          "desc": "least-significant 16 bits of *commitCount*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "VerifySignature": {
+    "name": "TPM2_VerifySignature",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_VerifySignature",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "handle of public key that will be used in the validation"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "digest",
+          "desc": "digest of the signed message"
+        },
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "signature to be tested"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMT_TK_VERIFIED",
+          "name": "validation",
+          "desc": "*tag* will be `TPM_ST_VERIFIED`"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "VerifySequenceComplete": {
+    "name": "TPM2_VerifySequenceComplete",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_VerifySequenceComplete",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "sequenceHandle",
+          "desc": "authorization for the sequence",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "handle of public key that will be used in the validation"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "signature to be tested"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMT_TK_VERIFIED",
+          "name": "validation",
+          "desc": "*tag* will be `TPM_ST_MESSAGE_VERIFIED`"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "VerifyDigestSignature": {
+    "name": "TPM2_VerifyDigestSignature",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_VerifyDigestSignature",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "handle of public key that will be used in the validation"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_SIGNATURE_CTX",
+          "name": "context",
+          "desc": "additional context (requires a supporting signing scheme)  depending on the scheme, *context* may be optional, i.e., zero-length."
+        },
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "digest",
+          "desc": "digest that was signed"
+        },
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "signature to be tested"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMT_TK_VERIFIED",
+          "name": "validation",
+          "desc": "*tag* will be `TPM_ST_DIGEST_VERIFIED`"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "Sign": {
+    "name": "TPM2_Sign",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_Sign",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "Handle of key that will perform signing",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "digest",
+          "desc": "digest to be signed"
+        },
+        {
+          "type": "TPMT_SIG_SCHEME+",
+          "name": "inScheme",
+          "desc": "signing scheme to use if the *scheme* for *keyHandle* is TPM_ALG_NULL"
+        },
+        {
+          "type": "TPMT_TK_HASHCHECK",
+          "name": "validation",
+          "desc": "proof that digest was created by the TPM  If *keyHandle* is not a restricted signing key, then this may be a NULL Ticket with *tag* = TPM_ST_HASHCHECK."
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "the signature"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "SignSequenceComplete": {
+    "name": "TPM2_SignSequenceComplete",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_SignSequenceComplete",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "sequenceHandle",
+          "desc": "authorization for the sequence",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "Handle of key that will perform signing",
+          "auth_index": 2,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "buffer",
+          "desc": "data to be added to the signature"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "the signature"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "SignDigest": {
+    "name": "TPM2_SignDigest",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_SignDigest",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "Handle of key that will perform signing",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_SIGNATURE_CTX",
+          "name": "context",
+          "desc": "additional context (requires a supporting signing scheme)  depending on the scheme, *context* may be optional, i.e., zero-length."
+        },
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "digest",
+          "desc": "digest to be signed"
+        },
+        {
+          "type": "TPMT_TK_HASHCHECK",
+          "name": "validation",
+          "desc": "proof that digest was created by the TPM  If *keyHandle* is not a restricted signing key, then this may be a NULL Ticket with *tag* = TPM_ST_HASHCHECK."
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "the signature"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "SetCommandCodeAuditStatus": {
+    "name": "TPM2_SetCommandCodeAuditStatus",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_SetCommandCodeAuditStatus",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PROVISION",
+          "name": "auth",
+          "desc": "TPM_RH_OWNER or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPMI_ALG_HASH+",
+          "name": "auditAlg",
+          "desc": "hash algorithm for the audit digest; if TPM_ALG_NULL, then the hash is not changed"
+        },
+        {
+          "type": "TPML_CC",
+          "name": "setList",
+          "desc": "list of commands that will be added to those that will be audited"
+        },
+        {
+          "type": "TPML_CC",
+          "name": "clearList",
+          "desc": "list of commands that will no longer be audited"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PCR_Extend": {
+    "name": "TPM2_PCR_Extend",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_PCR_Extend",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_PCR+",
+          "name": "pcrHandle",
+          "desc": "handle of the PCR",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPML_DIGEST_VALUES",
+          "name": "digests",
+          "desc": "list of tagged digest values to be extended"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PCR_Event": {
+    "name": "TPM2_PCR_Event",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_PCR_Event",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_PCR+",
+          "name": "pcrHandle",
+          "desc": "Handle of the PCR",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_EVENT",
+          "name": "eventData",
+          "desc": "Event data in sized buffer"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPML_DIGEST_VALUES",
+          "name": "digests",
+          "desc": "hash of *eventData* using all hashes for *pcrHandle*"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "PCR_Read": {
+    "name": "TPM2_PCR_Read",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PCR_Read",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPML_PCR_SELECTION",
+          "name": "pcrSelectionIn",
+          "desc": "The selection of PCR to read"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "UINT32",
+          "name": "pcrUpdateCounter",
+          "desc": "the current value of the PCR update counter"
+        },
+        {
+          "type": "TPML_PCR_SELECTION",
+          "name": "pcrSelectionOut",
+          "desc": "the PCR in the returned list"
+        },
+        {
+          "type": "TPML_DIGEST",
+          "name": "pcrValues",
+          "desc": "the contents of the PCR indicated in *pcrSelectOut→ pcrSelection[]* as tagged digests"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "PCR_Allocate": {
+    "name": "TPM2_PCR_Allocate",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_PCR_Allocate",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PLATFORM",
+          "name": "authHandle",
+          "desc": "TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPML_PCR_SELECTION",
+          "name": "pcrAllocation",
+          "desc": "the requested allocation"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMI_YES_NO",
+          "name": "allocationSuccess",
+          "desc": "YES if the allocation succeeded"
+        },
+        {
+          "type": "UINT32",
+          "name": "maxPCR",
+          "desc": "maximum number of PCR that may be in a bank"
+        },
+        {
+          "type": "UINT32",
+          "name": "sizeNeeded",
+          "desc": "number of octets required to satisfy the request"
+        },
+        {
+          "type": "UINT32",
+          "name": "sizeAvailable",
+          "desc": "Number of octets available. Computed before the allocation."
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "PCR_SetAuthPolicy": {
+    "name": "TPM2_PCR_SetAuthPolicy",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_PCR_SetAuthPolicy",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PLATFORM",
+          "name": "authHandle",
+          "desc": "TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "authPolicy",
+          "desc": "the desired *authPolicy*"
+        },
+        {
+          "type": "TPMI_ALG_HASH+",
+          "name": "hashAlg",
+          "desc": "the hash algorithm of the policy"
+        },
+        {
+          "type": "TPMI_DH_PCR",
+          "name": "pcrNum",
+          "desc": "the PCR for which the policy is to be set"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PCR_SetAuthValue": {
+    "name": "TPM2_PCR_SetAuthValue",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_PCR_SetAuthValue",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_PCR",
+          "name": "pcrHandle",
+          "desc": "handle for a PCR that may have an authorization value set",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "auth",
+          "desc": "the desired authorization value"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PCR_Reset": {
+    "name": "TPM2_PCR_Reset",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_PCR_Reset",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_PCR",
+          "name": "pcrHandle",
+          "desc": "the PCR to reset",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicySigned": {
+    "name": "TPM2_PolicySigned",
+    "tag": "TPM_ST_SESSIONS if an audit, encrypt, or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicySigned",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "authObject",
+          "desc": "handle for a key that will validate the signature"
+        },
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_NONCE",
+          "name": "nonceTPM",
+          "desc": "the policy nonce for the session  This can be the Empty Buffer."
+        },
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "cpHashA",
+          "desc": "digest of the command parameters to which this authorization is limited  This is not the *cpHash* for this command but the *cpHash* for the command to which this policy session will be applied. If it is not limited, the parameter will be the Empty Buffer."
+        },
+        {
+          "type": "TPM2B_NONCE",
+          "name": "policyRef",
+          "desc": "a reference to a policy relating to the authorization - may be the Empty Buffer  Size is limited to be no larger than the nonce size supported on the TPM."
+        },
+        {
+          "type": "INT32",
+          "name": "expiration",
+          "desc": "time when authorization will expire, measured in seconds from the time that *nonceTPM* was generated  If *expiration* is non-negative, a NULL Ticket is returned (see @sec:policy-ticket-creation)."
+        },
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "auth",
+          "desc": "signed authorization (not optional)"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_TIMEOUT",
+          "name": "timeout",
+          "desc": "implementation-specific time value used to indicate to the TPM when the ticket expires  If *policyTicket* is a NULL Ticket, then this shall be the Empty Buffer."
+        },
+        {
+          "type": "TPMT_TK_AUTH",
+          "name": "policyTicket",
+          "desc": "produced if the command succeeds and *expiration* in the command was negative; this ticket will use the TPM_ST_AUTH_SIGNED structure tag (see @sec:policy-ticket-creation)."
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "PolicySecret": {
+    "name": "TPM2_PolicySecret",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicySecret",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_ENTITY",
+          "name": "authHandle",
+          "desc": "handle for an entity providing the authorization",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_NONCE",
+          "name": "nonceTPM",
+          "desc": "the policy nonce for the session  This can be the Empty Buffer."
+        },
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "cpHashA",
+          "desc": "digest of the command parameters to which this authorization is limited  This is not the *cpHash* for this command but the *cpHash* for the command to which this policy session will be applied. If it is not limited, the parameter will be the Empty Buffer."
+        },
+        {
+          "type": "TPM2B_NONCE",
+          "name": "policyRef",
+          "desc": "a reference to a policy relating to the authorization - may be the Empty Buffer  Size is limited to be no larger than the nonce size supported on the TPM."
+        },
+        {
+          "type": "INT32",
+          "name": "expiration",
+          "desc": "time when authorization will expire, measured in seconds from the time that *nonceTPM* was generated  If *expiration* is non-negative, a NULL Ticket is returned (see @sec:policy-ticket-creation)."
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_TIMEOUT",
+          "name": "timeout",
+          "desc": "implementation-specific time value used to indicate to the TPM when the ticket expires  If *policyTicket* is a NULL Ticket, then this shall be the Empty Buffer."
+        },
+        {
+          "type": "TPMT_TK_AUTH",
+          "name": "policyTicket",
+          "desc": "produced if the command succeeds and *expiration* in the command was negative; this ticket will use the TPM_ST_AUTH_SECRET structure tag (see @sec:policy-ticket-creation)."
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "PolicyTicket": {
+    "name": "TPM2_PolicyTicket",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyTicket",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_TIMEOUT",
+          "name": "timeout",
+          "desc": "time when authorization will expire  The contents are TPM specific. This shall be the value returned when ticket was produced."
+        },
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "cpHashA",
+          "desc": "digest of the command parameters to which this authorization is limited  If it is not limited, the parameter will be the Empty Buffer."
+        },
+        {
+          "type": "TPM2B_NONCE",
+          "name": "policyRef",
+          "desc": "reference to a qualifier for the policy - may be the Empty Buffer"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "authName",
+          "desc": "Name of the object that provided the authorization"
+        },
+        {
+          "type": "TPMT_TK_AUTH",
+          "name": "ticket",
+          "desc": "an authorization ticket returned by the TPM in response to a TPM2_PolicySigned() or TPM2_PolicySecret()"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyOR": {
+    "name": "TPM2_PolicyOR",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyOR",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPML_DIGEST",
+          "name": "pHashList",
+          "desc": "the list of hashes to check for a match"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyPCR": {
+    "name": "TPM2_PolicyPCR",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyPCR",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "pcrDigest",
+          "desc": "expected digest value of the selected PCR using the hash algorithm of the session; may be zero length"
+        },
+        {
+          "type": "TPML_PCR_SELECTION",
+          "name": "pcrs",
+          "desc": "the PCR to include in the check digest"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyLocality": {
+    "name": "TPM2_PolicyLocality",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyLocality",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPMA_LOCALITY",
+          "name": "locality",
+          "desc": "the allowed localities for the policy"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyNV": {
+    "name": "TPM2_PolicyNV",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyNV",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_AUTH",
+          "name": "authHandle",
+          "desc": "handle indicating the source of the authorization value for the NV Index",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "the NV Index of the area to read"
+        },
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_OPERAND",
+          "name": "operandB",
+          "desc": "the second operand"
+        },
+        {
+          "type": "UINT16",
+          "name": "offset",
+          "desc": "the octet offset in the NV Index for the start of operand A"
+        },
+        {
+          "type": "TPM_EO",
+          "name": "operation",
+          "desc": "the comparison to make"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyCounterTimer": {
+    "name": "TPM2_PolicyCounterTimer",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyCounterTimer",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_OPERAND",
+          "name": "operandB",
+          "desc": "the second operand"
+        },
+        {
+          "type": "UINT16",
+          "name": "offset",
+          "desc": "the octet offset in the TPMS_TIME_INFO structure for the start of operand A"
+        },
+        {
+          "type": "TPM_EO",
+          "name": "operation",
+          "desc": "the comparison to make"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyCommandCode": {
+    "name": "TPM2_PolicyCommandCode",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyCommandCode",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM_CC",
+          "name": "code",
+          "desc": "the allowed *commandCode*"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyPhysicalPresence": {
+    "name": "TPM2_PolicyPhysicalPresence",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyPhysicalPresence",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyCpHash": {
+    "name": "TPM2_PolicyCpHash",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyCpHash",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "cpHashA",
+          "desc": "the *cpHash* added to the policy"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyNameHash": {
+    "name": "TPM2_PolicyNameHash",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyNameHash",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "nameHash",
+          "desc": "the digest to be added to the policy"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyDuplicationSelect": {
+    "name": "TPM2_PolicyDuplicationSelect",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyDuplicationSelect",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_NAME",
+          "name": "objectName",
+          "desc": "the Name of the object to be duplicated"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "newParentName",
+          "desc": "the Name of the new parent"
+        },
+        {
+          "type": "TPMI_YES_NO",
+          "name": "includeObject",
+          "desc": "if YES, the *objectName* will be included in the value in *policySession*→*policyDigest*"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyAuthorize": {
+    "name": "TPM2_PolicyAuthorize",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyAuthorize",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "approvedPolicy",
+          "desc": "digest of the policy being approved"
+        },
+        {
+          "type": "TPM2B_NONCE",
+          "name": "policyRef",
+          "desc": "a policy qualifier"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "keySign",
+          "desc": "Name of a key that can sign a policy addition"
+        },
+        {
+          "type": "TPMT_TK_VERIFIED",
+          "name": "checkTicket",
+          "desc": "ticket validating that *approvedPolicy* and *policyRef* were signed by *keySign*"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyAuthValue": {
+    "name": "TPM2_PolicyAuthValue",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyAuthValue",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyPassword": {
+    "name": "TPM2_PolicyPassword",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyPassword",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyGetDigest": {
+    "name": "TPM2_PolicyGetDigest",
+    "tag": "TPM_ST_SESSIONS if an audit or encrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyGetDigest",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "policyDigest",
+          "desc": "the current value of the *policySession*→*policyDigest*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "PolicyNvWritten": {
+    "name": "TPM2_PolicyNvWritten",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyNvWritten",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPMI_YES_NO",
+          "name": "writtenSet",
+          "desc": "YES if NV Index is required to have been written  NO if NV Index is required not to have been written"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyTemplate": {
+    "name": "TPM2_PolicyTemplate",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyTemplate",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "templateHash",
+          "desc": "the digest to be added to the policy"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyAuthorizeNV": {
+    "name": "TPM2_PolicyAuthorizeNV",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyAuthorizeNV",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_AUTH",
+          "name": "authHandle",
+          "desc": "handle indicating the source of the authorization value for the NV Index",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "the NV Index of the area to read"
+        },
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyCapability": {
+    "name": "TPM2_PolicyCapability",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyCapability",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_OPERAND",
+          "name": "operandB",
+          "desc": "the comparison data"
+        },
+        {
+          "type": "UINT16",
+          "name": "offset",
+          "desc": "the offset in the capability data structure for the start of the comparison (operand A)"
+        },
+        {
+          "type": "TPM_EO",
+          "name": "operation",
+          "desc": "the comparison to make"
+        },
+        {
+          "type": "TPM_CAP",
+          "name": "capability",
+          "desc": "group selection; determines the maximum size of operand A"
+        },
+        {
+          "type": "UINT32",
+          "name": "property",
+          "desc": "further qualification of *capability*"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyParameters": {
+    "name": "TPM2_PolicyParameters",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyParameters",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "pHash",
+          "desc": "the parameter digest added to the policy"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PolicyTransportSPDM": {
+    "name": "TPM2_PolicyTransportSPDM",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_PolicyTransportSPDM",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_NAME",
+          "name": "reqKeyName",
+          "desc": "the requester's secure channel key Name added to the policy  This can be the Empty Buffer."
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "tpmKeyName",
+          "desc": "the TPM's secure channel key Name added to the policy  This can be the Empty Buffer."
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "CreatePrimary": {
+    "name": "TPM2_CreatePrimary",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_CreatePrimary",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_HIERARCHY",
+          "name": "primaryHandle",
+          "desc": "TPM_RH_ENDORSEMENT, TPM_RH_OWNER, TPM_RH_PLATFORM+{PP}, or TPM_RH_NULL, or the associated firmware-limited or SVN-limited hierarchies",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_SENSITIVE_CREATE",
+          "name": "inSensitive",
+          "desc": "the sensitive data, (see TPM 2.0 Part 1, *Sensitive Values*)."
+        },
+        {
+          "type": "TPM2B_PUBLIC",
+          "name": "inPublic",
+          "desc": "the public template"
+        },
+        {
+          "type": "TPM2B_DATA",
+          "name": "outsideInfo",
+          "desc": "data that will be included in the creation data for this object to provide permanent, verifiable linkage between this object and some object owner data"
+        },
+        {
+          "type": "TPML_PCR_SELECTION",
+          "name": "creationPCR",
+          "desc": "PCR that will be used in creation data"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [
+        {
+          "type": "TPM_HANDLE",
+          "name": "objectHandle",
+          "desc": "handle of type TPM_HT_TRANSIENT for created Primary Object"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_PUBLIC",
+          "name": "outPublic",
+          "desc": "the public portion of the created object"
+        },
+        {
+          "type": "TPM2B_CREATION_DATA",
+          "name": "creationData",
+          "desc": "contains a TPMS_CREATION_DATA"
+        },
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "creationHash",
+          "desc": "digest of *creationData.creationData* using *nameAlg* of *outPublic*"
+        },
+        {
+          "type": "TPMT_TK_CREATION",
+          "name": "creationTicket",
+          "desc": "ticket used by TPM2_CertifyCreation() to validate that the creation data was produced by the TPM"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "name",
+          "desc": "the Name of the created object"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "HierarchyControl": {
+    "name": "TPM2_HierarchyControl",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_HierarchyControl",
+    "modifiers": [
+      "NV",
+      "E"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_BASE_HIERARCHY",
+          "name": "authHandle",
+          "desc": "TPM_RH_ENDORSEMENT, TPM_RH_OWNER or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPMI_RH_ENABLES",
+          "name": "enable",
+          "desc": "the enable being modified  TPM_RH_ENDORSEMENT, TPM_RH_OWNER, TPM_RH_PLATFORM, or TPM_RH_PLATFORM_NV"
+        },
+        {
+          "type": "TPMI_YES_NO",
+          "name": "state",
+          "desc": "YES if the enable should be SET, NO if the enable should be CLEAR"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "SetPrimaryPolicy": {
+    "name": "TPM2_SetPrimaryPolicy",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_SetPrimaryPolicy",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_HIERARCHY_POLICY",
+          "name": "authHandle",
+          "desc": "TPM_RH_LOCKOUT, TPM_RH_ENDORSEMENT, TPM_RH_OWNER, TPMI_RH_ACT or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "authPolicy",
+          "desc": "an authorization policy digest; may be the Empty Buffer  If *hashAlg* is TPM_ALG_NULL, then this shall be an Empty Buffer."
+        },
+        {
+          "type": "TPMI_ALG_HASH+",
+          "name": "hashAlg",
+          "desc": "the hash algorithm to use for the policy  If the *authPolicy* is an Empty Buffer, then this field shall be TPM_ALG_NULL."
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "ChangePPS": {
+    "name": "TPM2_ChangePPS",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_ChangePPS",
+    "modifiers": [
+      "NV",
+      "E"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PLATFORM",
+          "name": "authHandle",
+          "desc": "TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "ChangeEPS": {
+    "name": "TPM2_ChangeEPS",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_ChangeEPS",
+    "modifiers": [
+      "NV",
+      "E"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PLATFORM",
+          "name": "authHandle",
+          "desc": "TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "Clear": {
+    "name": "TPM2_Clear",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_Clear",
+    "modifiers": [
+      "NV",
+      "E"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_CLEAR",
+          "name": "authHandle",
+          "desc": "TPM_RH_LOCKOUT or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "ClearControl": {
+    "name": "TPM2_ClearControl",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_ClearControl",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_CLEAR",
+          "name": "auth",
+          "desc": "TPM_RH_LOCKOUT or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPMI_YES_NO",
+          "name": "disable",
+          "desc": "YES if the *disableOwnerClear* flag is to be SET, NO if the flag is to be CLEAR."
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "HierarchyChangeAuth": {
+    "name": "TPM2_HierarchyChangeAuth",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_HierarchyChangeAuth",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_HIERARCHY_AUTH",
+          "name": "authHandle",
+          "desc": "TPM_RH_LOCKOUT, TPM_RH_ENDORSEMENT, TPM_RH_OWNER or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_AUTH",
+          "name": "newAuth",
+          "desc": "new authorization value"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "ReadOnlyControl": {
+    "name": "TPM2_ReadOnlyControl",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_ReadOnlyControl",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PLATFORM",
+          "name": "authHandle",
+          "desc": "TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPMI_YES_NO",
+          "name": "state",
+          "desc": "YES when enabling the Read-Only mode of operation.  NO when disabling the Read-Only mode of operation."
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "DictionaryAttackLockReset": {
+    "name": "TPM2_DictionaryAttackLockReset",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_DictionaryAttackLockReset",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_LOCKOUT",
+          "name": "lockHandle",
+          "desc": "TPM_RH_LOCKOUT",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "DictionaryAttackParameters": {
+    "name": "TPM2_DictionaryAttackParameters",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_DictionaryAttackParameters",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_LOCKOUT",
+          "name": "lockHandle",
+          "desc": "TPM_RH_LOCKOUT",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "UINT32",
+          "name": "newMaxTries",
+          "desc": "count of authorization failures before the lockout is imposed"
+        },
+        {
+          "type": "UINT32",
+          "name": "newRecoveryTime",
+          "desc": "time in seconds before the authorization failure count is automatically decremented  A value of zero indicates that DA protection is disabled."
+        },
+        {
+          "type": "UINT32",
+          "name": "lockoutRecovery",
+          "desc": "time in seconds after a *lockoutAuth* failure before use of *lockoutAuth* is allowed  A value of zero indicates that a reboot is required."
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "PP_Commands": {
+    "name": "TPM2_PP_Commands",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_PP_Commands",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PLATFORM",
+          "name": "auth",
+          "desc": "TPM_RH_PLATFORM+PP  Assertion of Physical Presence is always required, regardless of previous calls to this command.",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPML_CC",
+          "name": "setList",
+          "desc": "list of commands to be added to those that will require that Physical Presence be asserted"
+        },
+        {
+          "type": "TPML_CC",
+          "name": "clearList",
+          "desc": "list of commands that will no longer require that Physical Presence be asserted"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "SetAlgorithmSet": {
+    "name": "TPM2_SetAlgorithmSet",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_SetAlgorithmSet",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PLATFORM",
+          "name": "authHandle",
+          "desc": "TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "UINT32",
+          "name": "algorithmSet",
+          "desc": "a TPM vendor-dependent value indicating the algorithm set selection"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "FieldUpgradeStart": {
+    "name": "TPM2_FieldUpgradeStart",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_FieldUpgradeStart",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PLATFORM",
+          "name": "authorization",
+          "desc": "TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "ADMIN"
+        },
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "keyHandle",
+          "desc": "handle of a public area that contains the TPM Vendor Authorization Key that will be used to validate *manifestSignature*"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DIGEST",
+          "name": "fuDigest",
+          "desc": "digest of the first block in the field upgrade sequence"
+        },
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "manifestSignature",
+          "desc": "signature over *fuDigest* using the key associated with *keyHandle* (not optional)"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "FieldUpgradeData": {
+    "name": "TPM2_FieldUpgradeData",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_FieldUpgradeData",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "fuData",
+          "desc": "field upgrade image data"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMT_HA+",
+          "name": "nextDigest",
+          "desc": "tagged digest of the next block  TPM_ALG_NULL if field update is complete"
+        },
+        {
+          "type": "TPMT_HA",
+          "name": "firstDigest",
+          "desc": "tagged digest of the first block of the sequence"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "FirmwareRead": {
+    "name": "TPM2_FirmwareRead",
+    "tag": "TPM_ST_SESSIONS if an audit or encrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_FirmwareRead",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "UINT32",
+          "name": "sequenceNumber",
+          "desc": "the number of previous calls to this command in this sequence  set to 0 on the first call"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "fuData",
+          "desc": "field upgrade image data"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "ContextSave": {
+    "name": "TPM2_ContextSave",
+    "tag": "TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": false,
+    "code": "TPM_CC_ContextSave",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_CONTEXT",
+          "name": "saveHandle",
+          "desc": "handle of the resource to save"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMS_CONTEXT",
+          "name": "context",
+          "desc": "the saved context blob"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "ContextLoad": {
+    "name": "TPM2_ContextLoad",
+    "tag": "TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": false,
+    "code": "TPM_CC_ContextLoad",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMS_CONTEXT",
+          "name": "context",
+          "desc": "the context blob"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [
+        {
+          "type": "TPMI_DH_CONTEXT",
+          "name": "loadedHandle",
+          "desc": "the handle assigned to the resource after it has been successfully loaded"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "FlushContext": {
+    "name": "TPM2_FlushContext",
+    "tag": "TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": false,
+    "code": "TPM_CC_FlushContext",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMI_DH_CONTEXT",
+          "name": "flushHandle",
+          "desc": "the handle of the item to flush  NOTE This is a use of a handle as a parameter."
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "EvictControl": {
+    "name": "TPM2_EvictControl",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_EvictControl",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PROVISION",
+          "name": "auth",
+          "desc": "TPM_RH_OWNER or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "objectHandle",
+          "desc": "the handle of a loaded object"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPMI_DH_PERSISTENT",
+          "name": "persistentHandle",
+          "desc": "if *objectHandle* is a transient object handle, then this is the persistent handle for the object  if *objectHandle* is a persistent object handle, then it shall be the same value as *persistentHandle*"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "ReadClock": {
+    "name": "TPM2_ReadClock",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_ReadClock",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMS_TIME_INFO",
+          "name": "currentTime",
+          "desc": "the current *time*, *clock*, *resetCount*, and *restartCount*"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "ClockSet": {
+    "name": "TPM2_ClockSet",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_ClockSet",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PROVISION",
+          "name": "auth",
+          "desc": "TPM_RH_OWNER or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "UINT64",
+          "name": "newTime",
+          "desc": "new *Clock* setting in milliseconds"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "ClockRateAdjust": {
+    "name": "TPM2_ClockRateAdjust",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_ClockRateAdjust",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PROVISION",
+          "name": "auth",
+          "desc": "TPM_RH_OWNER or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM_CLOCK_ADJUST",
+          "name": "rateAdjust",
+          "desc": "Adjustment to current *Clock* update rate"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "GetCapability": {
+    "name": "TPM2_GetCapability",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_GetCapability",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM_CAP",
+          "name": "capability",
+          "desc": "group selection; determines the format of the response"
+        },
+        {
+          "type": "UINT32",
+          "name": "property",
+          "desc": "further definition of information"
+        },
+        {
+          "type": "UINT32",
+          "name": "propertyCount",
+          "desc": "number of properties of the indicated type to return"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMI_YES_NO",
+          "name": "moreData",
+          "desc": "flag to indicate if there are more values of this type"
+        },
+        {
+          "type": "TPMS_CAPABILITY_DATA",
+          "name": "capabilityData",
+          "desc": "the capability data"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "TestParms": {
+    "name": "TPM2_TestParms",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_TestParms",
+    "modifiers": [],
+    "command": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMT_PUBLIC_PARMS",
+          "name": "parameters",
+          "desc": "algorithm parameters to be validated"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "SetCapability": {
+    "name": "TPM2_SetCapability",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_SetCapability",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_HIERARCHY_AUTH+",
+          "name": "authHandle",
+          "desc": "TPM_RH_LOCKOUT, TPM_RH_ENDORSEMENT, TPM_RH_OWNER, TPM_RH_PLATFORM+{PP}, or TPM_RH_NULL",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_SET_CAPABILITY_DATA",
+          "name": "setCapabilityData",
+          "desc": "the capability data to be set"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_DefineSpace": {
+    "name": "TPM2_NV_DefineSpace",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_DefineSpace",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PROVISION",
+          "name": "authHandle",
+          "desc": "TPM_RH_OWNER or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_AUTH",
+          "name": "auth",
+          "desc": "the authorization value"
+        },
+        {
+          "type": "TPM2B_NV_PUBLIC",
+          "name": "publicInfo",
+          "desc": "the public parameters of the NV area"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_UndefineSpace": {
+    "name": "TPM2_NV_UndefineSpace",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_UndefineSpace",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PROVISION",
+          "name": "authHandle",
+          "desc": "TPM_RH_OWNER or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_NV_DEFINED_INDEX",
+          "name": "nvIndex",
+          "desc": "the NV Index to remove from NV space"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_UndefineSpaceSpecial": {
+    "name": "TPM2_NV_UndefineSpaceSpecial",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_UndefineSpaceSpecial",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_DEFINED_INDEX",
+          "name": "nvIndex",
+          "desc": "Index to be deleted",
+          "auth_index": 1,
+          "auth_role": "ADMIN"
+        },
+        {
+          "type": "TPMI_RH_PLATFORM",
+          "name": "platform",
+          "desc": "TPM_RH_PLATFORM+{PP}",
+          "auth_index": 2,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_ReadPublic": {
+    "name": "TPM2_NV_ReadPublic",
+    "tag": "TPM_ST_SESSIONS if an audit or encrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_ReadPublic",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "the NV Index"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_NV_PUBLIC",
+          "name": "nvPublic",
+          "desc": "the public area of the NV Index"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "nvName",
+          "desc": "the Name of the *nvIndex*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "NV_Write": {
+    "name": "TPM2_NV_Write",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_Write",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_AUTH",
+          "name": "authHandle",
+          "desc": "handle indicating the source of the authorization value for the NV Index",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "the NV Index of the area to write"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_NV_BUFFER",
+          "name": "data",
+          "desc": "the data to write"
+        },
+        {
+          "type": "UINT16",
+          "name": "offset",
+          "desc": "the octet offset into the NV Area"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_Increment": {
+    "name": "TPM2_NV_Increment",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_Increment",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_AUTH",
+          "name": "authHandle",
+          "desc": "handle indicating the source of the authorization value for the NV Index",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "the NV Index to increment"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_Extend": {
+    "name": "TPM2_NV_Extend",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_Extend",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_AUTH",
+          "name": "authHandle",
+          "desc": "handle indicating the source of the authorization value for the NV Index",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "the NV Index to extend"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_NV_BUFFER",
+          "name": "data",
+          "desc": "the data to extend"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_SetBits": {
+    "name": "TPM2_NV_SetBits",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_SetBits",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_AUTH",
+          "name": "authHandle",
+          "desc": "handle indicating the source of the authorization value for the NV Index",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "NV Index of the area in which the bit is to be set"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "UINT64",
+          "name": "bits",
+          "desc": "the data to OR with the current contents"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_WriteLock": {
+    "name": "TPM2_NV_WriteLock",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_WriteLock",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_AUTH",
+          "name": "authHandle",
+          "desc": "handle indicating the source of the authorization value for the NV Index",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "the NV Index of the area to lock"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_GlobalWriteLock": {
+    "name": "TPM2_NV_GlobalWriteLock",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_GlobalWriteLock",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PROVISION",
+          "name": "authHandle",
+          "desc": "TPM_RH_OWNER or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_Read": {
+    "name": "TPM2_NV_Read",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_Read",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_AUTH",
+          "name": "authHandle",
+          "desc": "handle indicating the source of the authorization value for the NV Index",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "the NV Index to be read"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "UINT16",
+          "name": "size",
+          "desc": "number of octets to read"
+        },
+        {
+          "type": "UINT16",
+          "name": "offset",
+          "desc": "octet offset into the NV area  This value shall be less than or equal to the size of the *nvIndex* data."
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_NV_BUFFER",
+          "name": "data",
+          "desc": "the data read"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "NV_ReadLock": {
+    "name": "TPM2_NV_ReadLock",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_ReadLock",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_AUTH",
+          "name": "authHandle",
+          "desc": "handle indicating the source of the authorization value for the NV Index",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "the NV Index to be locked"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_ChangeAuth": {
+    "name": "TPM2_NV_ChangeAuth",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_ChangeAuth",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "handle of the entity",
+          "auth_index": 1,
+          "auth_role": "ADMIN"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_AUTH",
+          "name": "newAuth",
+          "desc": "new authorization value"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_Certify": {
+    "name": "TPM2_NV_Certify",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_Certify",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT+",
+          "name": "signHandle",
+          "desc": "handle of the key used to sign the attestation structure",
+          "auth_index": 1,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_NV_AUTH",
+          "name": "authHandle",
+          "desc": "handle indicating the source of the authorization value for the NV Index",
+          "auth_index": 2,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "Index for the area to be certified"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_DATA",
+          "name": "qualifyingData",
+          "desc": "user-provided qualifying data"
+        },
+        {
+          "type": "TPMT_SIG_SCHEME+",
+          "name": "inScheme",
+          "desc": "signing scheme to use if the *scheme* for *signHandle* is TPM_ALG_NULL"
+        },
+        {
+          "type": "UINT16",
+          "name": "size",
+          "desc": "number of octets to certify"
+        },
+        {
+          "type": "UINT16",
+          "name": "offset",
+          "desc": "octet offset into the NV area  This value shall be less than or equal to the size of the *nvIndex* data."
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_ATTEST",
+          "name": "certifyInfo",
+          "desc": "the structure that was signed"
+        },
+        {
+          "type": "TPMT_SIGNATURE",
+          "name": "signature",
+          "desc": "the asymmetric signature over *certifyInfo* using the key referenced by *signHandle*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "NV_DefineSpace2": {
+    "name": "TPM2_NV_DefineSpace2",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_DefineSpace2",
+    "modifiers": [
+      "NV"
+    ],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_PROVISION",
+          "name": "authHandle",
+          "desc": "TPM_RH_OWNER or TPM_RH_PLATFORM+{PP}",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_AUTH",
+          "name": "auth",
+          "desc": "the authorization value"
+        },
+        {
+          "type": "TPM2B_NV_PUBLIC_2",
+          "name": "publicInfo",
+          "desc": "the public parameters of the NV area"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "NV_ReadPublic2": {
+    "name": "TPM2_NV_ReadPublic2",
+    "tag": "TPM_ST_SESSIONS if an audit or encrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_NV_ReadPublic2",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_NV_INDEX",
+          "name": "nvIndex",
+          "desc": "the NV Index"
+        }
+      ],
+      "parameters": []
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPM2B_NV_PUBLIC_2",
+          "name": "nvPublic",
+          "desc": "the public area of the NV Index"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "nvName",
+          "desc": "the Name of the *nvIndex*"
+        }
+      ]
+    },
+    "supports_encrypt": true
+  },
+  "AC_GetCapability": {
+    "name": "TPM2_AC_GetCapability",
+    "tag": "TPM_ST_SESSIONS if an audit session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_AC_GetCapability",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_AC",
+          "name": "ac",
+          "desc": "handle indicating the Attached Component"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM_AT",
+          "name": "capability",
+          "desc": "starting info type"
+        },
+        {
+          "type": "UINT32",
+          "name": "count",
+          "desc": "maximum number of values to return"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMI_YES_NO",
+          "name": "moreData",
+          "desc": "flag to indicate whether there are more values"
+        },
+        {
+          "type": "TPML_AC_CAPABILITIES",
+          "name": "capabilitiesData",
+          "desc": "list of capabilities"
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "AC_Send": {
+    "name": "TPM2_AC_Send",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_AC_Send",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_DH_OBJECT",
+          "name": "sendObject",
+          "desc": "handle of the object being sent to ac",
+          "auth_index": 1,
+          "auth_role": "DUP"
+        },
+        {
+          "type": "TPMI_RH_NV_AUTH",
+          "name": "authHandle",
+          "desc": "handle indicating the source of the authorization value for the Attached Component or NV Alias",
+          "auth_index": 2,
+          "auth_role": "USER"
+        },
+        {
+          "type": "TPMI_RH_AC",
+          "name": "ac",
+          "desc": "handle indicating the Attached Component to which the object will be sent"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_MAX_BUFFER",
+          "name": "acDataIn",
+          "desc": "Optional non sensitive information related to the object"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": [
+        {
+          "type": "TPMS_AC_OUTPUT",
+          "name": "acDataOut",
+          "desc": "May include AC specific data or information about an error."
+        }
+      ]
+    },
+    "supports_encrypt": false
+  },
+  "Policy_AC_SendSelect": {
+    "name": "TPM2_Policy_AC_SendSelect",
+    "tag": "TPM_ST_SESSIONS if an audit or decrypt session is present; otherwise, TPM_ST_NO_SESSIONS",
+    "requires_auth": false,
+    "supports_audit": true,
+    "code": "TPM_CC_Policy_AC_SendSelect",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_SH_POLICY",
+          "name": "policySession",
+          "desc": "handle for the policy session being extended"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "TPM2B_NAME",
+          "name": "objectName",
+          "desc": "the Name of the Object to be sent"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "authHandleName",
+          "desc": "the Name associated with *authHandle* used in the TPM2_AC_Send() command"
+        },
+        {
+          "type": "TPM2B_NAME",
+          "name": "acName",
+          "desc": "the Name of the Attached Component to which the Object will be sent"
+        },
+        {
+          "type": "TPMI_YES_NO",
+          "name": "includeObject",
+          "desc": "if SET, *objectName* will be included in the value in *policySession*→  *policyDigest*"
+        }
+      ]
+    },
+    "supports_decrypt": true,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  },
+  "ACT_SetTimeout": {
+    "name": "TPM2_ACT_SetTimeout",
+    "tag": "TPM_ST_SESSIONS",
+    "requires_auth": true,
+    "supports_audit": true,
+    "code": "TPM_CC_ACT_SetTimeout",
+    "modifiers": [],
+    "command": {
+      "handles": [
+        {
+          "type": "TPMI_RH_ACT",
+          "name": "actHandle",
+          "desc": "Handle of the selected ACT",
+          "auth_index": 1,
+          "auth_role": "USER"
+        }
+      ],
+      "parameters": [
+        {
+          "type": "UINT32",
+          "name": "startTimeout",
+          "desc": "the start timeout value for the ACT in seconds"
+        }
+      ]
+    },
+    "supports_decrypt": false,
+    "response": {
+      "handles": [],
+      "parameters": []
+    },
+    "supports_encrypt": false
+  }
+}

@@ -1,0 +1,42 @@
+syntax = "proto3";
+package tpmtools;
+option go_package = "github.com/chrisfenner/tpm.tools/proto";
+
+import "constants.proto";
+
+message GetCommandDescriptionRequest {
+  TpmCC code = 1;
+}
+
+message TypeNameDescription {
+  string type = 1;
+  string name = 2;
+  string desc = 3;
+}
+
+message CommandStructure {
+  repeated TypeNameDescription handles    = 1;
+  repeated TypeNameDescription parameters = 2;
+}
+
+message ResponseStructure {
+  repeated TypeNameDescription handles    = 1;
+  repeated TypeNameDescription parameters = 2;
+}
+
+message CommandDescription {
+  string            name             = 1;
+  string            tag              = 2;
+  bool              requires_auth    = 3;
+  bool              supports_audit   = 4;
+  TpmCC             code             = 5;
+  repeated string   modifiers        = 6;
+  CommandStructure  command          = 7;
+  bool              supports_decrypt = 8;
+  ResponseStructure response         = 9;
+  bool              supports_encrypt = 10;
+}
+
+message GetCommandDescriptionResponse {
+  CommandDescription description = 1;
+}
