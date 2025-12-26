@@ -1,6 +1,5 @@
-import { ReturnCodeLookupRequest } from "../proto/rc";
 import { ReturnCodeLookupResult } from "../proto/rc";
-import { ReturnCodeLookupResponse } from "../proto/rc";
+import { rcLookup } from "./rest";
 
 import "./styles.css";
 
@@ -23,27 +22,10 @@ export async function lookupReturnCode() {
     return;
   }
 
-  // Define the data payload
-  const req: ReturnCodeLookupRequest = {
-    query: inputValue,
-  };
-
   try {
-    const response = await fetch("/rc/lookup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-protobuf",
-      },
-      body: ReturnCodeLookupRequest.toBinary(req).buffer as ArrayBuffer,
+    const rsp = await rcLookup({
+      query: inputValue,
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const result = await response.bytes();
-
-    const rsp = ReturnCodeLookupResponse.fromBinary(result);
 
     resultsElement.textContent = "";
 
