@@ -28,16 +28,13 @@ export async function lookupReturnCode() {
     query: inputValue,
   };
 
-  let reqBytes: ArrayBuffer = ReturnCodeLookupRequest.toBinary(req)
-    .buffer as ArrayBuffer;
-
   try {
     const response = await fetch("/rc/lookup", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-protobuf",
       },
-      body: reqBytes,
+      body: ReturnCodeLookupRequest.toBinary(req).buffer as ArrayBuffer,
     });
 
     if (!response.ok) {

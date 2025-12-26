@@ -1,17 +1,19 @@
+# syntax=docker.io/docker/dockerfile:1.19
 # We use two different build environments to avoid installing npm inside docker
 # The first one has npm and we use it to minify some files (e.g., css)
 FROM node:25-trixie AS builder_npm
 
 WORKDIR /usr/src/app
-RUN npm install @protobuf-ts/plugin protoc
-RUN npm install typescript ts-loader
-RUN npm install webpack webpack-cli
-RUN npm install css-loader style-loader
-RUN npm install @types/node
-RUN npm install @webtui/css
-RUN npm install @webtui/theme-catppuccin
+RUN npm install --save-dev @protobuf-ts/plugin protoc
+RUN npm install --save-dev typescript ts-loader
+RUN npm install --save-dev webpack webpack-cli
+RUN npm install --save-dev css-loader style-loader
+RUN npm install --save-dev @types/node
+RUN npm install --save-dev @webtui/css
+RUN npm install --save-dev @webtui/theme-catppuccin
 
-COPY . .
+# Copy everything except the local Node stuff.
+COPY --exclude=node_modules --exclude=package.json --exclude=package-lock.json . .
 
 # Compile the protobufs into the proto directory
 RUN npx protoc --ts_out proto/ --proto_path proto proto/rc.proto
@@ -20,6 +22,7 @@ RUN npx protoc --ts_out proto/ --proto_path proto proto/rc.proto
 # RUN tsc --project ./tsconfig.json --outDir generated/js
 
 # Build the js+css bundle using webpack
+RUN npx tsc -v
 RUN npx webpack-cli -c ./webpack.config.js
 RUN ls dist/bundle.js
 
