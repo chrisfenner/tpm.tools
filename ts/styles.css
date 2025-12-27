@@ -129,7 +129,12 @@ header {
   flex-wrap: wrap;
 }
 
+#cmd-list-results a {
+  flex-grow: 1;
+}
+
 #cmd-list-results div {
+  text-align: center;
   --cmdcolor: var(--sapphire);
 }
 #cmd-list-results div:hover {
