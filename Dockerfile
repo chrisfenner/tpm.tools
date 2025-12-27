@@ -16,7 +16,7 @@ RUN npm install --save-dev @webtui/theme-catppuccin
 COPY --exclude=node_modules --exclude=package.json --exclude=package-lock.json . .
 
 # Compile the protobufs into the proto directory
-RUN npx protoc --ts_out proto/ --proto_path proto proto/rc.proto
+RUN npx protoc --ts_out proto/ --proto_path proto proto/*.proto
 
 # Compile the TypeScript
 # RUN tsc --project ./tsconfig.json --outDir generated/js
@@ -49,10 +49,7 @@ COPY --from=builder_npm /usr/src/app .
 RUN go run ./templates/templatizer.go
 
 # Run the protobuf compiler
-RUN protoc --go_out=. --go_opt=paths=source_relative proto/rc.proto
-RUN ls *.go
-RUN ls proto
-RUN cat proto/rc.pb.go
+RUN protoc --go_out=. --go_opt=paths=source_relative proto/*.proto
 
 # Compile the actual app, which will embed the above files.
 RUN go build -v -o /run-app .
