@@ -1,4 +1,10 @@
 import { ReturnCodeLookupRequest, ReturnCodeLookupResponse } from "../proto/rc";
+import {
+  GetAllCommandNamesRequest,
+  GetAllCommandNamesResponse,
+  GetCommandDescriptionRequest,
+  GetCommandDescriptionResponse,
+} from "../proto/cmd";
 
 // Internal helper function for the other functions in this file.
 // Send some bytes and get some bytes back.
@@ -27,5 +33,26 @@ export async function rcLookup(
 ): Promise<ReturnCodeLookupResponse> {
   return ReturnCodeLookupResponse.fromBinary(
     await sendReceiveBytes("/rc/lookup", ReturnCodeLookupRequest.toBinary(req))
+  );
+}
+
+// The /cmd/list call.
+export async function cmdList(
+  req: GetAllCommandNamesRequest
+): Promise<GetAllCommandNamesResponse> {
+  return GetAllCommandNamesResponse.fromBinary(
+    await sendReceiveBytes("/cmd/list", GetAllCommandNamesRequest.toBinary(req))
+  );
+}
+
+// The /cmd/lookup call.
+export async function cmdLookup(
+  req: GetCommandDescriptionRequest
+): Promise<GetCommandDescriptionResponse> {
+  return GetCommandDescriptionResponse.fromBinary(
+    await sendReceiveBytes(
+      "/cmd/lookup",
+      GetCommandDescriptionRequest.toBinary(req)
+    )
   );
 }

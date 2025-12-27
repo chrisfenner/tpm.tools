@@ -97,6 +97,10 @@ header {
   --appcolor: var(--red);
 }
 
+.app.cmd {
+  --appcolor: var(--peach);
+}
+
 .app:hover {
   --appcolor: var(--pink);
 }
@@ -117,6 +121,25 @@ header {
   display: flex;
   flex-direction: column;
   padding-left: 2ch;
+}
+
+#cmd-list-results {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+#cmd-list-results div {
+  --cmdcolor: var(--sapphire);
+}
+#cmd-list-results div:hover {
+  --cmdcolor: var(--pink);
+}
+
+#cmd-list-results * {
+  text-decoration: none;
+  color: var(--cmdcolor);
+  --box-border-color: var(--cmdcolor);
 }
 
 footer {

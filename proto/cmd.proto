@@ -2,10 +2,8 @@ syntax = "proto3";
 package tpmtools;
 option go_package = "github.com/chrisfenner/tpm.tools/proto";
 
-import "constants.proto";
-
 message GetCommandDescriptionRequest {
-  TpmCC code = 1;
+  string name = 1;
 }
 
 message TypeNameDescription {
@@ -29,7 +27,7 @@ message CommandDescription {
   string            tag              = 2;
   bool              requires_auth    = 3;
   bool              supports_audit   = 4;
-  TpmCC             code             = 5;
+  string            code             = 5;
   repeated string   modifiers        = 6;
   CommandStructure  command          = 7;
   bool              supports_decrypt = 8;
@@ -39,4 +37,11 @@ message CommandDescription {
 
 message GetCommandDescriptionResponse {
   CommandDescription description = 1;
+}
+
+message GetAllCommandNamesRequest {
+}
+
+message GetAllCommandNamesResponse {
+    repeated string name = 1;
 }
